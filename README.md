@@ -13,7 +13,7 @@
 ### 🚀 *Welcome to the 12-day journey of mastering Data Structures & Algorithms in Java!* 🎯
 
 
-***Resource Link - <a href="https://canva.link/52roxdoar8i7rrl" target="_blank"  style="text-decoration: none">👋 Click Me</a>***
+**Resource Link - <a href="https://canva.link/dkoxwclci31dz0q" target="_blank"  style="text-decoration: none">👋 Click Me</a>**
 
 
 
