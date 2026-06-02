@@ -1,16 +1,21 @@
+<div align="center">
+
 # 🚀 Java Data Structures & Algorithms - VCE Semester 1
 
-![Java](https://img.shields.io/badge/Java-21-ED8B00?style=flat-square&logo=java)
+![Java](https://img.shields.io/badge/Java-DSA-ED8B00?style=flat-square&logo=java)
 ![Level](https://img.shields.io/badge/Level-Intermediate-yellow?style=flat-square)
 ![Course](https://img.shields.io/badge/Course-VCE%204th%20Yr%20Sem%201-blue?style=flat-square)
 ![Days](https://img.shields.io/badge/Duration-12%20Days-brightgreen?style=flat-square)
 ![Status](https://img.shields.io/badge/Status-In%20Progress%20🔄-orange?style=flat-square)
 
-> **Welcome to the 12-day journey of mastering Data Structures & Algorithms in Java!** 🎯
-> 
-> This repository is your complete companion for understanding how data is organized, how algorithms manipulate it, and why this matters in real-world software engineering. By the end of Day 12, you'll have hands-on experience with the most fundamental DSA concepts that form the backbone of technical interviews and efficient software design.
+### 🚀 *Welcome to the 12-day journey of mastering Data Structures & Algorithms in Java!* 🎯
+ 
+
+
+This repository is your complete companion for understanding how data is organized, how algorithms manipulate it, and why this matters in real-world software engineering. By the end of Day 12, you'll have hands-on experience with the most fundamental DSA concepts that form the backbone of technical interviews and efficient software design.
 
 ---
+</div>
 
 ## 📚 Quick Navigation
 
