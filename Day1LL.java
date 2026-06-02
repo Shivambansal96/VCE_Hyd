@@ -86,7 +86,24 @@ public class Day1LL {
 
     public void deleteEnd() {
 
-        
+        if (head == null) {
+            System.out.println("LL is empty!!!");
+        }
+
+        else if (head.next == null) {
+            head = null;
+        }
+
+        else {
+            Node current = head;
+
+            while (current.next.next != null) {
+                current = current.next;
+            }
+
+            current.next = null;
+
+        }
     }
 
     public void printLL() {
@@ -109,10 +126,10 @@ public class Day1LL {
         LL.append(99);
         // LL.insertAtPos(55, 1);
         LL.append(5);
-        // LL.prepend(100);
-        // LL.prepend(99);
+        LL.prepend(100);
+        LL.prepend(99);
         LL.printLL();
-        LL.deleteStart();
+        LL.deleteEnd();
         // LL.append(27);
 
         LL.printLL();
