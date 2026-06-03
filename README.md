@@ -27,12 +27,13 @@ This repository is your complete companion for understanding how data is organiz
 | Status | Day | Topic | Difficulty | File |
 |--------|-----|-------|-----------|------|
 | 🔴 Done | **Day 1** | [Singly Linked List](#day-1-singly-linked-list) | 🟢 Easy | `Day1LL.java` |
-| 🔴 Done | **Day 2** | [Doubly & Circular LL](#day-2-doubly--circular-linked-lists) | 🟡 Medium | `Day2DLL.java` |
-| ⚪ Coming | **Day 3-4** | [Stacks](#day-3-4-stacks) | 🟡 Medium | `Day3Stack.java` |
-| ⚪ Coming | **Day 5-6** | [Queues](#day-5-6-queues) | 🟡 Medium | `Day5Queue.java` |
-| ⚪ Coming | **Day 7-9** | [Trees & BST](#day-7-9-trees--binary-search-trees) | 🔴 Hard | `Day7Tree.java` |
-| ⚪ Coming | **Day 10-11** | [Graphs](#day-10-11-graphs) | 🔴 Hard | `Day10Graph.java` |
-| ⚪ Coming | **Day 12** | [Dynamic Programming](#day-12-dynamic-programming) | 🔴 Hard | `Day12DP.java` |
+| 🔴 Done | **Day 2A** | [Doubly Linked List](#day-2-doubly--circular-linked-lists) | 🟡 Medium | `Day2DLL.java` |
+| 🔴 Done | **Day 2B** | [Circular Linked List](#day-2-doubly--circular-linked-lists) | 🟡 Medium | `Day2CLL.java` |
+| 🔴 Done | **Day 3** | [Collections Framework](#day-3-collections-framework) | 🟡 Medium | `Day3Collections.java` |
+| ⚪ Coming | **Day 4-5** | [Stacks](#day-4-5-stacks) | 🟡 Medium | `Day4Stack.java` |
+| ⚪ Coming | **Day 6-7** | [Queues](#day-6-7-queues) | 🟡 Medium | `Day6Queue.java` |
+| ⚪ Coming | **Day 8-10** | [Trees & BST](#day-8-10-trees--binary-search-trees) | 🔴 Hard | `Day8Tree.java` |
+| ⚪ Coming | **Day 11-12** | [Graphs](#day-11-12-graphs) | 🔴 Hard | `Day11Graph.java` |
 
 ---
 
@@ -60,10 +61,10 @@ By the end of this 12-day intensive, you will be able to:
 
 ```
 WEEK 1                          WEEK 2                           WEEK 3
-Day 1: Singly LL       ├──────► Day 5: Queues         ├──────► Day 10: Graphs
-Day 2: Doubly/Circ LL  ├──────► Day 6: Circular Q    │         Day 11: Graph Algorithms
-Day 3: Stacks         ├──────► Day 7: BST            │         Day 12: Dynamic Programming
-Day 4: Stack Apps     └──────► Day 8-9: Tree Traversals
+Day 1: Singly LL       ├──────► Day 4: Stacks         ├──────► Day 8: Trees
+Day 2: Doubly/Circ LL  ├──────► Day 5: Stack Apps    │         Day 9: BST
+Day 3: Collections     ├──────► Day 6: Queues        │         Day 10: Tree Traversals
+Day 4: Stacks          └──────► Day 7: Deque & PQ    └──────► Day 11-12: Graphs & DP
 ```
 
 ---
@@ -456,6 +457,302 @@ Prepend 5:        Append 10:         Append 15:
 💡 **Always track tail** in DLL/CLL for O(1) append  
 💡 **Circular lists loop forever** - be careful with traversal  
 💡 **Trade-off thinking**: Extra pointers = More flexibility but more complexity  
+
+---
+
+## Day 3: Collections Framework
+
+**Status**: 🔴 **COMPLETED** | **Difficulty**: 🟡 **Medium** | **File**: `Day3Collections.java`
+
+### 🎯 What You'll Learn
+- Master the **Collections Framework hierarchy**: Iterable → Collection → Specific types
+- Understand and implement **Lists** (ArrayList, LinkedList, Stack)
+- Work with **Sets** (HashSet, TreeSet, LinkedHashSet)
+- Implement **Queues** (Queue, ArrayDeque, PriorityQueue)
+- Use **Iterators** for traversing collections safely
+- Create **custom Comparators** for sorting (Lambda & Non-Lambda expressions)
+- Apply collections to solve real problems (duplicates, k-largest elements)
+
+### 📚 Concepts Explained
+
+#### Collections Framework Hierarchy
+
+```
+Iterable (Top Level)
+    │
+    └─► Collection (Interface)
+        │
+        ├─► List (Ordered, allows duplicates)
+        │   ├─ ArrayList (Dynamic array-based)
+        │   ├─ LinkedList (Node-based)
+        │   └─ Stack (LIFO)
+        │
+        ├─► Set (Unique elements only)
+        │   ├─ HashSet (Randomized order, O(1) lookup)
+        │   ├─ TreeSet (Sorted order, O(log n) lookup)
+        │   └─ LinkedHashSet (Insertion order)
+        │
+        └─► Queue (FIFO)
+            ├─ LinkedList (Standard queue)
+            ├─ ArrayDeque (Double-ended queue)
+            └─ PriorityQueue (Min-heap by default)
+```
+
+#### Key Interfaces
+
+**Iterable**: Allows use of enhanced for-loop and Iterator
+```
+Iterable → hasNext() / next() → iterate safely
+```
+
+**Collection**: Common methods for all collections
+```
+add(), remove(), contains(), size(), isEmpty(), clear()
+```
+
+#### Lists - Ordered Collections
+
+| Type | Implementation | Time: Add/Remove/Get | Order | Use Case |
+|------|-----------------|----------------------|-------|----------|
+| **ArrayList** | Dynamic array | O(1) add end, O(n) middle | Insertion | Fast access, frequent reads |
+| **LinkedList** | Doubly-linked | O(1) add/remove at ends, O(n) middle | Insertion | Frequent inserts/deletes |
+| **Stack** | LIFO | O(1) push/pop | LIFO | Undo, recursion, parsing |
+
+#### Sets - Unique Elements
+
+| Type | Implementation | Time: Add/Remove/Lookup | Order | Use Case |
+|------|-----------------|------------------------|-------|----------|
+| **HashSet** | Hash table | O(1) average | Random | Fast duplicate detection |
+| **TreeSet** | Red-Black Tree | O(log n) | Sorted | Sorted unique values |
+| **LinkedHashSet** | Hash + LinkedList | O(1) average | Insertion | Maintain order, unique values |
+
+#### Queues - FIFO Collections
+
+| Type | Operations | Special Features | Use Case |
+|------|-----------|-----------------|----------|
+| **LinkedList Queue** | offer/poll/peek | Standard FIFO | Basic queueing |
+| **ArrayDeque** | offerFirst/offerLast/pollFirst/pollLast | Deque (both ends) | Efficient double-ended ops |
+| **PriorityQueue** | offer/poll/peek | Min-heap by default | Scheduling, k-largest |
+
+---
+
+### 💻 Key Code Snippets
+
+#### Comparator with Lambda Expression
+```java
+// Sorting by last digit of numbers
+List<Integer> arrList = new ArrayList<>(Arrays.asList(22, 33, 41, 55, 69, 90));
+
+Comparator<Integer> comp = (Integer a, Integer b) -> {
+    if (a % 10 > b % 10) {
+        return 1;    // a should come after b (ascending by last digit)
+    } else {
+        return -1;   // a should come before b
+    }
+};
+
+Collections.sort(arrList, comp);
+// Result: [41, 33, 55, 22, 69, 90] (sorted by last digit: 1,3,5,2,9,0)
+```
+
+#### Comparator without Lambda (Traditional)
+```java
+Comparator<Integer> comp = new Comparator<Integer>() {
+    @Override
+    public int compare(Integer a, Integer b) {
+        if (a % 10 > b % 10) {
+            return 1;
+        } else {
+            return -1;
+        }
+    }
+};
+
+Collections.sort(arrList, comp);
+```
+
+#### Set - Detecting Duplicates (O(n) vs O(n²))
+```java
+// METHOD 1: Brute Force - O(n²) Time Complexity
+public static boolean checkDuplicatesM1(int[] arr) {
+    for (int i = 0; i < arr.length; i++) {
+        for (int j = i + 1; j < arr.length; j++) {
+            if (arr[i] == arr[j]) {
+                return true;  // Found duplicate
+            }
+        }
+    }
+    return false;
+}
+
+// METHOD 2: Using HashSet - O(n) Time Complexity ⚡
+public static boolean checkDuplicatesM2(int[] arr) {
+    Set<Integer> hashSet = new HashSet<>();
+    for (int num : arr) {
+        if (hashSet.contains(num)) {
+            return true;  // Duplicate found
+        } else {
+            hashSet.add(num);
+        }
+    }
+    return false;
+}
+```
+
+#### Queue - Finding K Largest Elements
+```java
+// Using MinHeap (PriorityQueue)
+Queue<Integer> pq = new PriorityQueue<>();
+int[] arr = {5, 1, 10, 3, 12, 2, 8};
+int k = 3;
+
+for (int num : arr) {
+    pq.add(num);
+    if (k < pq.size()) {
+        pq.poll();  // Remove smallest to keep k largest
+    }
+}
+
+System.out.println(pq);  // Output: [3, 5, 8] (or similar - heap order)
+```
+
+#### Iterator - Safe Traversal
+```java
+Set<Integer> hashSet = new HashSet<>();
+hashSet.add(4);
+hashSet.add(9);
+hashSet.add(300);
+hashSet.add(1);
+
+Iterator<Integer> it = hashSet.iterator();
+
+while (it.hasNext()) {
+    System.out.println(it.next());
+}
+```
+
+#### ArrayDeque - Deque Operations
+```java
+ArrayDeque<Integer> deque = new ArrayDeque<>();
+
+// Add at both ends
+deque.offerFirst(0);   // Add to front
+deque.offer(91);       // Add to back (default)
+deque.offerLast(99);   // Add to back
+
+// Remove from both ends
+int front = deque.pollFirst();  // Remove from front
+int back = deque.pollLast();    // Remove from back
+
+System.out.println(deque);  // Remaining elements
+```
+
+---
+
+### 🔢 Complexity Comparison
+
+| Operation | ArrayList | LinkedList | HashSet | TreeSet | PriorityQueue |
+|-----------|-----------|------------|---------|---------|---------------|
+| **Add** | O(1) amortized, O(n) at start | O(1) at ends, O(n) middle | O(1) avg | O(log n) | O(log n) |
+| **Remove** | O(n) | O(1) at ends, O(n) middle | O(1) avg | O(log n) | O(log n) |
+| **Search** | O(n) | O(n) | O(1) avg | O(log n) | O(n) |
+| **Space** | O(n) | O(n) | O(n) | O(n) | O(n) |
+| **Ordered** | ❌ Insertion | ❌ Insertion | ❌ No | ✅ Sorted | ✅ Heap |
+
+---
+
+### 🎨 Visual Examples
+
+**Collections Framework Relationship:**
+```
+Iterable ← Top-level interface
+    │
+    └─► Collection ← All collections inherit
+        │
+        ├─► List (ArrayList, LinkedList, Stack)
+        │   └─ [1, 2, 2, 3] ← Duplicates allowed, indexed
+        │
+        ├─► Set (HashSet, TreeSet, LinkedHashSet)
+        │   └─ {1, 2, 3} ← No duplicates, no index
+        │
+        └─► Queue (PriorityQueue, ArrayDeque)
+            └─ [1 → 2 → 3] ← FIFO/Priority order
+```
+
+**HashSet vs TreeSet vs LinkedHashSet:**
+```
+Original: 4, 9, 300, 1, 77
+
+HashSet:         {1, 4, 9, 77, 300}      (Random order)
+TreeSet:         {1, 4, 9, 77, 300}      (Sorted order) ⚡
+LinkedHashSet:   {4, 9, 300, 1, 77}      (Insertion order)
+```
+
+**PriorityQueue K-Largest Example:**
+```
+Array: [5, 1, 10, 3, 12, 2, 8], K = 3
+
+Step 1: Add all, remove smallest when size > k
+Step 2: Min-heap keeps: [3, 5, 8]
+        (These are the 3 largest elements)
+```
+
+---
+
+### 🧪 Practice Problems
+
+**🟢 Easy**
+1. Create a list, add elements, iterate using Iterator
+2. Create a HashSet, add numbers with duplicates - verify duplicates are ignored
+3. Sort a list using Collections.sort()
+4. Find the maximum element using TreeSet
+
+**🟡 Medium**
+5. Detect duplicates in an array (use HashSet)
+6. Find k largest elements from an array (use PriorityQueue)
+7. Create custom Comparator to sort by last digit of number
+8. Implement a queue using LinkedList
+
+**🔴 Hard**
+9. Find common elements between two lists (use Set intersection)
+10. Implement LRU Cache using LinkedHashMap + HashMap
+11. Sort objects using custom Comparator (compare multiple fields)
+12. Find all pairs in array that sum to target (use HashSet for O(n))
+
+---
+
+### ⚠️ Common Mistakes
+
+| ❌ Mistake | ✅ Solution | 💭 Why It Matters |
+|-----------|-----------|------------------|
+| Using ArrayList when frequent deletions needed | Use LinkedList for middle deletions | O(n) vs O(1) difference |
+| Forgetting that Set doesn't allow duplicates | Use List if duplicates needed | Sets silently ignore duplicate adds |
+| Creating HashSet with large objects | Override hashCode() and equals() | Default implementation may cause collisions |
+| Sorting with wrong Comparator logic | Remember: return -1 (before), 0 (equal), 1 (after) | Reverse logic = reverse sort |
+| Using Iterator.next() without hasNext() | Always check hasNext() first | Causes NoSuchElementException |
+| Not knowing when to use each Set type | HashSet (fast), TreeSet (sorted), LinkedHashSet (order) | Choose based on requirement |
+| Adding to PriorityQueue then sorting | PriorityQueue already maintains heap order | Sorting again is wasteful |
+
+---
+
+### 🔗 External Resources
+
+- 📺 **VisuAlgo - Hash Table & Heap**: [Visualize Set & Queue Operations](https://visualgo.net/)
+- 📖 **Oracle Java Docs**: [Collections Framework](https://docs.oracle.com/javase/tutorial/collections/)
+- 📖 **GeeksforGeeks**: [Java Collections Framework](https://www.geeksforgeeks.org/collections-in-java-2/)
+- 🎥 **YouTube**: "Collections Framework Explained" - Code with Harry
+- 📘 **LeetCode**: Filter problems by "Design", "Hash Table", "Heap" tags
+
+---
+
+### 📌 Key Takeaways
+
+💡 **Collections Framework = Iterable → Collection → List/Set/Queue** - Know the hierarchy!  
+💡 **Choose wisely**: ArrayList (fast access), LinkedList (fast ops), Set (unique), Queue (ordered processing)  
+💡 **HashSet is O(1)** - Use for duplicate detection and fast lookups  
+💡 **Comparators control sorting** - Lambda expressions make code clean  
+💡 **PriorityQueue is a min-heap** - Perfect for k-largest problems  
+💡 **Iterator is safer** than for-loop when removing elements  
 
 ---
 
