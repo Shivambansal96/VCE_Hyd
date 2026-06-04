@@ -30,7 +30,7 @@ This repository is your complete companion for understanding how data is organiz
 | 🔴 Done | **Day 2A** | [Doubly Linked List](#day-2-doubly--circular-linked-lists) | 🟡 Medium | `Day2DLL.java` |
 | 🔴 Done | **Day 2B** | [Circular Linked List](#day-2-doubly--circular-linked-lists) | 🟡 Medium | `Day2CLL.java` |
 | 🔴 Done | **Day 3** | [Collections Framework](#day-3-collections-framework) | 🟡 Medium | `Day3Collections.java` |
-| ⚪ Coming | **Day 4-5** | [Stacks](#day-4-5-stacks) | 🟡 Medium | `Day4Stack.java` |
+| 🔴 Done | **Day 4** | [Stacks](#day-4-stacks) | 🟡 Medium | `Day4Stacks.java` |
 | ⚪ Coming | **Day 6-7** | [Queues](#day-6-7-queues) | 🟡 Medium | `Day6Queue.java` |
 | ⚪ Coming | **Day 8-10** | [Trees & BST](#day-8-10-trees--binary-search-trees) | 🔴 Hard | `Day8Tree.java` |
 | ⚪ Coming | **Day 11-12** | [Graphs](#day-11-12-graphs) | 🔴 Hard | `Day11Graph.java` |
@@ -753,6 +753,523 @@ Step 2: Min-heap keeps: [3, 5, 8]
 💡 **Comparators control sorting** - Lambda expressions make code clean  
 💡 **PriorityQueue is a min-heap** - Perfect for k-largest problems  
 💡 **Iterator is safer** than for-loop when removing elements  
+
+---
+
+## Day 4: Stacks
+
+**Status**: 🔴 **COMPLETED** | **Difficulty**: 🟡 **Medium** | **File**: `Day4Stacks.java`
+
+### 🎯 What You'll Learn
+- Complete **Comparators** concepts using Lambda expressions (sorting strategies)
+- Understand **Map Interface** deeply (HashMap, LinkedHashMap, TreeMap)
+- Implement **Stacks using Arrays, ArrayList, and Linked List**
+- Solve real stack problems: **Valid Parentheses** and **Next Greater Element**
+- Master **LIFO (Last-In-First-Out)** principle and its applications
+
+### 📚 Concepts Explained
+
+#### Comparators - Sorting Strategies
+
+A **Comparator** is a functional interface used to define custom sorting logic. It allows you to sort collections based on specific criteria using lambda expressions or anonymous classes.
+
+**Comparator Basics:**
+```
+compare(a, b) returns:
+  > 0  : a comes after b
+  = 0  : a and b are equal
+  < 0  : a comes before b
+```
+
+**Common Sorting Strategies:**
+
+1. **Sort by Last Digit (Units Place)**
+```
+Array: [99, 19, 23, 56, 76, 10, 31]
+By last digit: [10, 31, 23, 56, 76, 99, 19] (0,1,3,6,6,9,9)
+```
+
+2. **Sort by Odd/Even**
+```
+Odd numbers before even numbers (or vice versa)
+[1, 3, 5, 7] before [2, 4, 6, 8]
+```
+
+**Lambda Expression Syntax:**
+```
+Comparator<Integer> comp = (Integer a, Integer b) -> {
+    if (a % 10 > b % 10) return 1;   // a after b
+    else return -1;                  // a before b
+};
+```
+
+---
+
+#### Map Interface Hierarchy
+
+The Map interface provides key-value pair storage. Let's explore three implementations:
+
+```
+Map Interface
+├─ HashMap: Fast lookup, random order, O(1) average
+├─ TreeMap: Sorted by keys, O(log n), navigable
+└─ LinkedHashMap: Maintains insertion order, O(1) average
+```
+
+**HashMap** - No Order Guarantee
+```
+HashMap:     {3→Sejal, 1→Mohini, 51→Mohini, 10→Mohini, 2→Shivam}
+             (Random order)
+```
+
+**TreeMap** - Sorted by Keys
+```
+TreeMap:     {1→Mohini, 2→Shivam, 3→Sejal, 10→Mohini, 51→Mohini}
+             (Sorted ascending)
+```
+
+**LinkedHashMap** - Insertion Order
+```
+LinkedHashMap: {3→Sejal, 1→Mohini, 51→Mohini, 10→Mohini, 2→Shivam}
+               (Same order as insertion)
+```
+
+---
+
+#### Stack Data Structure
+
+A **Stack** is a **LIFO (Last-In-First-Out)** data structure where:
+- Elements are added to the **top** (push)
+- Elements are removed from the **top** (pop)
+- The last element added is the first one removed
+
+```
+Push 3:    [3]
+Push 2:    [3, 2]
+Push 1:    [3, 2, 1]  ← Top
+Pop:       [3, 2]     (Returns 1)
+Pop:       [3]        (Returns 2)
+```
+
+**Stack Operations:**
+- **Push** - Add element to top: O(1)
+- **Pop** - Remove element from top: O(1)
+- **Peek** - View top element: O(1)
+- **isEmpty/isFull** - Check status: O(1)
+
+---
+
+### 💻 Key Code Snippets
+
+#### Comparators - Sort by Last Digit (Lambda Expression)
+```java
+// Sorting by last digit of numbers
+List<Integer> arrList = new ArrayList<>(Arrays.asList(99, 19, 23, 56, 76, 10, 31));
+
+Comparator<Integer> comp = (Integer a, Integer b) -> {
+    if (a % 10 > b % 10) {
+        return 1;    // a should come after b (ascending by last digit)
+    } else {
+        return -1;   // a should come before b
+    }
+};
+
+System.out.println(arrList);
+Collections.sort(arrList, comp);
+System.out.println(arrList);
+// Result: [10, 31, 23, 56, 76, 99, 19] (sorted by last digit: 0,1,3,6,6,9,9)
+```
+
+#### Comparators - Sort by Odd/Even
+```java
+// Sort odd numbers before even numbers
+Comparator<Integer> comp2 = (Integer a, Integer b) -> {
+    if (a % 2 == 0) {
+        return 1;    // Even numbers come after
+    } else {
+        return -1;   // Odd numbers come before
+    }
+};
+
+System.out.println(arrList);
+Collections.sort(arrList, comp2);
+System.out.println(arrList);  
+// Odd numbers appear first: [99, 19, 23, 31, 23, 56, 76, 10]
+```
+
+#### HashMap - Element Frequency (n/3 times)
+```java
+// Find all elements occurring more than n/3 times
+public static void elementMoreThanN3() {
+    Map<Integer, Integer> hashMap = new HashMap<>();
+    int[] arr = {1, 4, 1, 4, 2, 1, 7, 9, 1};  // n = 9, n/3 = 3
+    int n = arr.length;
+    
+    // Count frequency of each element
+    for (int i = 0; i < arr.length; i++) {
+        if (hashMap.containsKey(arr[i])) {
+            hashMap.put(arr[i], hashMap.get(arr[i]) + 1);
+        } else {
+            hashMap.put(arr[i], 1);
+        }
+    }
+    
+    // Find elements with frequency >= n/3
+    for (Map.Entry<Integer, Integer> e : hashMap.entrySet()) {
+        if (e.getValue() >= (n / 3)) {
+            System.out.print(e.getKey() + " ");
+        }
+    }
+    // Output: 1 4 (both occur 4 times, which is > 3)
+}
+```
+
+#### TreeMap - Built-in Methods
+```java
+Map<String, String> treeMap = new TreeMap<>();
+treeMap.put("name", "Shivam");
+treeMap.put("isTrainer", "True");
+treeMap.put("topic", "Maps");
+
+// Check key existence
+System.out.println(treeMap.containsKey("names"));  // false
+
+// Get value
+System.out.println(treeMap.get("name"));  // Shivam
+
+// Put if key doesn't exist
+treeMap.putIfAbsent("author", "anonymous");
+
+// Iterate through entries
+for (Map.Entry<String, String> data: treeMap.entrySet()) {
+    System.out.println(data.getKey() + " -> " + data.getValue());
+}
+// Output (sorted by key):
+// author -> anonymous
+// isTrainer -> True
+// name -> Shivam
+// topic -> Maps
+```
+
+#### Stack Implementation Using Array
+```java
+public class StackArray {
+    int[] arr;
+    int size;
+    int top = -1;
+    
+    public StackArray(int size) {
+        this.size = size;
+        arr = new int[size];
+    }
+    
+    public boolean isFull() {
+        return arr.length - 1 == top;
+    }
+    
+    public boolean isEmpty() {
+        return top == -1;
+    }
+    
+    public int peek() {
+        if (isEmpty()) {
+            System.out.println("Stack is Empty || UNDERFLOW");
+            return -1;
+        }
+        return arr[top];
+    }
+    
+    public void push(int data) {
+        if (isFull()) {
+            System.out.println("Stack is Full || OVERFLOW");
+        } else {
+            top++;
+            arr[top] = data;
+        }
+    }
+    
+    public int pop() {
+        if (isEmpty()) {
+            System.out.println("Stack is Empty || UNDERFLOW");
+            return -1;
+        }
+        int lastEle = arr[top];
+        top--;
+        return lastEle;
+    }
+}
+```
+
+#### Stack Implementation Using ArrayList
+```java
+public class StackArrayList {
+    List<Integer> arrList = new ArrayList<>();
+    int top = -1;
+    
+    public boolean isEmpty() {
+        return top == -1;
+    }
+    
+    public void push(int data) {
+        arrList.add(data);
+        top++;
+    }
+    
+    public int pop() {
+        if (isEmpty()) {
+            System.out.println("Stack is Empty !!!");
+            return -1;
+        }
+        int lastEle = arrList.get(top);
+        arrList.remove(top);
+        top--;
+        return lastEle;
+    }
+    
+    public int peek() {
+        if (isEmpty()) {
+            System.out.println("Stack is Empty !!!");
+            return -1;
+        }
+        return arrList.get(top);
+    }
+}
+```
+
+#### Valid Parentheses - Method 1 (Basic Approach)
+```java
+// Check if string has valid parentheses
+public class ValidParentheses1 {
+    public static void main(String[] args) {
+        Stack<Character> stk = new Stack<>();
+        boolean flag = true;
+        String s = "(({}))";  
+        
+        if (s.equals("")) {
+            System.out.println("String is Empty !!!");
+        } else {
+            for (int i = 0; i < s.length(); i++) {
+                // Push opening brackets
+                if (s.charAt(i) == '(' || s.charAt(i) == '{' || s.charAt(i) == '[') {
+                    stk.push(s.charAt(i));
+                } 
+                // Match closing brackets
+                else {
+                    if (!stk.isEmpty()) {
+                        if ((stk.peek() == '(' && s.charAt(i) == ')') ||
+                            (stk.peek() == '{' && s.charAt(i) == '}') ||
+                            (stk.peek() == '[' && s.charAt(i) == ']')) {
+                            stk.pop();
+                        }
+                    } else {
+                        flag = false;
+                        break;
+                    }
+                }
+            }
+            System.out.println(flag ? "Valid Parentheses" : "Invalid Parentheses");
+        }
+    }
+}
+```
+
+#### Valid Parentheses - Method 2 (Using HashMap)
+```java
+// More elegant approach using Map for bracket matching
+public class ValidParentheses2 {
+    public static boolean validParentheses(Stack<Character> stk, String s) {
+        Map<Character, Character> map = new HashMap<>();
+        map.put(')', '(');
+        map.put('}', '{');
+        map.put(']', '[');
+        
+        if (s.equals(""))
+            return false;
+        
+        for (int i = 0; i < s.length(); i++) {
+            // Push opening brackets
+            if (s.charAt(i) == '(' || s.charAt(i) == '[' || s.charAt(i) == '{') {
+                stk.push(s.charAt(i));
+            }
+            // Match closing brackets using map
+            else {
+                if (stk.isEmpty())
+                    return false;
+                if (stk.peek().equals(map.get(s.charAt(i)))) {
+                    stk.pop();
+                }
+            }
+        }
+        return stk.isEmpty();  // Stack should be empty for valid string
+    }
+    
+    public static void main(String[] args) {
+        Stack<Character> stk = new Stack<>();
+        String s = "(({}))";  
+        boolean res = validParentheses(stk, s);
+        System.out.println(res);  // Output: true
+    }
+}
+```
+
+#### Next Greater Element
+```java
+// Find the next greater element for each element in array
+// Array: [4, 5, 2, 10, 8]
+// Result: [5, 10, 10, -1, -1]  (Next greater to right, -1 if none)
+
+public class NextGreaterElement {
+    public static int[] nextGreaterElement(Stack<Integer> stk, int[] arr, int[] res) {
+        // Traverse array from right to left
+        for (int i = arr.length - 1; i >= 0; i--) {
+            // Pop elements smaller than current
+            while (!stk.isEmpty()) {
+                if (stk.peek() > arr[i]) {
+                    res[i] = stk.peek();  // Found next greater
+                    break;
+                } else {
+                    stk.pop();  // Remove smaller elements
+                }
+            }
+            stk.push(arr[i]);  // Push current element
+        }
+        return res;
+    }
+
+    public static void main(String[] args) {
+        Stack<Integer> stk = new Stack<>();
+        int[] arr = {4, 5, 2, 10, 8};
+        int n = arr.length;
+        int[] res = new int[n];
+        Arrays.fill(res, -1);  // Initialize with -1
+        
+        res = nextGreaterElement(stk, arr, res);
+        
+        for (int val : res) {
+            System.out.print(val + " ");
+        }
+        // Output: 5 10 10 -1 -1
+    }
+}
+```
+
+---
+
+### 🔢 Complexity Analysis
+
+| Operation | Array Stack | ArrayList Stack | LinkedList Stack | HashMap | TreeMap | LinkedHashMap |
+|-----------|-------------|-----------------|------------------|---------|---------|---------------|
+| **Push** | O(1) | O(1) amortized | O(1) | - | - | - |
+| **Pop** | O(1) | O(1) | O(1) | - | - | - |
+| **Peek** | O(1) | O(1) | O(1) | - | - | - |
+| **Insert (Map)** | - | - | - | O(1) avg | O(log n) | O(1) avg |
+| **Delete (Map)** | - | - | - | O(1) avg | O(log n) | O(1) avg |
+| **Search (Map)** | - | - | - | O(1) avg | O(log n) | O(1) avg |
+| **Space** | O(n) fixed | O(n) dynamic | O(n) dynamic | O(n) | O(n) | O(n) |
+
+---
+
+### 🎨 Visual Examples
+
+**Valid Parentheses Matching:**
+```
+String: "(({}))"
+        
+Push '('    → Stack: [(]
+Push '('    → Stack: [(, (]
+Push '{'    → Stack: [(, (, {]
+Push '}'    → Match! Pop '{' → Stack: [(, (]
+Push ')'    → Match! Pop '(' → Stack: [(
+Push ')'    → Match! Pop '(' → Stack: []
+Result: VALID! ✓
+
+Invalid: "(())" → Extra closing bracket → INVALID!
+```
+
+**Next Greater Element:**
+```
+Array:  [4, 5, 2, 10, 8]
+
+For 8 (rightmost): No element > 8 to right → -1
+For 10: No element > 10 to right → -1
+For 2: 10 is greater and to right → 10
+For 5: 10 is greater and to right → 10
+For 4: 5 is greater and to right → 5
+
+Result: [5, 10, 10, -1, -1]
+```
+
+**Map Comparison:**
+```
+Insertion Order: {3→Sejal, 1→Mohini, 51→Mohini, 10→Mohini, 2→Shivam}
+
+HashMap:       {3→Sejal, 1→Mohini, 51→Mohini, 10→Mohini, 2→Shivam}  (Random)
+TreeMap:       {1→Mohini, 2→Shivam, 3→Sejal, 10→Mohini, 51→Mohini}  (Sorted keys)
+LinkedHashMap: {3→Sejal, 1→Mohini, 51→Mohini, 10→Mohini, 2→Shivam}  (Insertion)
+```
+
+---
+
+### 🧪 Practice Problems
+
+**🟢 Easy**
+1. Create a Comparator to sort numbers by their last digit
+2. Create a Comparator to sort odd/even numbers
+3. Count occurrences of elements using HashMap
+4. Check if a string contains only valid parentheses
+
+**🟡 Medium**
+5. Implement stack using array and test push/pop/peek operations
+6. Implement stack using ArrayList
+7. Next Greater Element to the right in an array
+8. Find all elements occurring more than n/3 times using HashMap
+9. TreeMap operations and sorting by keys
+10. Reverse a string using stack
+
+**🔴 Hard**
+11. Largest rectangle in histogram (uses stack)
+12. Trapping rainwater (two-pointer + stack hybrid)
+13. Daily temperatures (next greater variant)
+14. Implement Min Stack (push, pop, peek, getMin all O(1))
+
+---
+
+### ⚠️ Common Mistakes
+
+| ❌ Mistake | ✅ Solution | 💭 Why It Matters |
+|-----------|-----------|-------------------|
+| Confusing HashMap and TreeMap | Use HashMap for fast O(1) lookup, TreeMap when sorted order needed | Performance difference: O(1) vs O(log n) |
+| Forgetting to decrement `top` in array stack pop | Always do `top--` after popping | Otherwise top doesn't move, stack breaks |
+| Using wrong Map implementation | LinkedHashMap ≠ TreeMap (insertion vs sorted) | Different use cases! |
+| Not checking isEmpty() before pop/peek | Always check first | Prevents null errors or wrong values |
+| Using stack when queue would be better | Think LIFO vs FIFO requirement | Wrong data structure = wrong output |
+| Parentheses matching logic reversed | Push opening, pop on closing, check match | Reversed logic gives opposite results |
+| Not initializing result array in NGE | Use Arrays.fill(res, -1) | Otherwise shows 0 instead of -1 |
+| Matching all bracket types at once | Use separate conditions for each type | Prevents cross-type matching errors |
+
+---
+
+### 🔗 External Resources
+
+- 📺 **VisuAlgo - Stack & Queue**: [Visualize Stack Operations](https://visualgo.net/en/list)
+- 📖 **GeeksforGeeks - Stack**: [Complete Stack Guide](https://www.geeksforgeeks.org/stack-data-structure/)
+- 📖 **GeeksforGeeks - Map**: [HashMap vs TreeMap](https://www.geeksforgeeks.org/differences-between-hashmap-and-treemap-in-java/)
+- 💡 **LeetCode Problems**: 
+  - Valid Parentheses (#20)
+  - Next Greater Element (#496)
+  - Min Stack (#155)
+- 🎥 **YouTube**: "Stack Problems Explained" - Code Help
+
+---
+
+### 📌 Key Takeaways
+
+💡 **Comparators control custom sorting** - Lambda expressions make the code clean and concise  
+💡 **Choose your Map**: HashMap (fast O(1) lookup), TreeMap (sorted order O(log n)), LinkedHashMap (insertion order)  
+💡 **LIFO is the key** - Stack reverses order (last in = first out)  
+💡 **Valid Parentheses = Stack problem** - Push opening, pop on closing  
+💡 **NGE pattern** - Traverse right to left, use stack to track greater elements  
+💡 **Array vs ArrayList Stack** - Arrays are fixed size (overflow possible), ArrayList is dynamic  
 
 ---
 
