@@ -31,7 +31,8 @@ This repository is your complete companion for understanding how data is organiz
 | 🔴 Done | **Day 2B** | [Circular Linked List](#day-2-doubly--circular-linked-lists) | 🟡 Medium | `Day2CLL.java` |
 | 🔴 Done | **Day 3** | [Collections Framework](#day-3-collections-framework) | 🟡 Medium | `Day3Collections.java` |
 | 🔴 Done | **Day 4** | [Stacks](#day-4-stacks) | 🟡 Medium | `Day4Stacks.java` |
-| ⚪ Coming | **Day 6-7** | [Queues](#day-6-7-queues) | 🟡 Medium | `Day6Queue.java` |
+| 🔴 Done | **Day 5** | [Stack Applications & Queues](#day-5-stack-applications--queues) | 🔴 Hard | `Day5Queues.java` |
+| ⚪ Coming | **Day 6-7** | [Queues](#day-6-7-two-pointer--recursion--backTracking) | 🟡 Medium | `Day6Queue.java` |
 | ⚪ Coming | **Day 8-10** | [Trees & BST](#day-8-10-trees--binary-search-trees) | 🔴 Hard | `Day8Tree.java` |
 | ⚪ Coming | **Day 11-12** | [Graphs](#day-11-12-graphs) | 🔴 Hard | `Day11Graph.java` |
 
@@ -1273,6 +1274,292 @@ LinkedHashMap: {3→Sejal, 1→Mohini, 51→Mohini, 10→Mohini, 2→Shivam}  (I
 
 ---
 
+
+---
+
+## Day 5: Stack Applications & Queues
+
+**Status**: 🔴 **COMPLETED** | **Difficulty**: 🔴 **Hard** | **File**: `Day5Queues.java`
+
+### 🎯 What You'll Learn
+- Solve monotonic stack problems: **Next/Previous Greater/Smaller Element & Index**
+- Apply stack patterns to solve **Largest Rectangle in Histogram**
+- Implement **Queue using Arrays** (basic linear queue)
+- Implement **Circular Queue** using arrays with wrap-around logic
+
+---
+
+### 📚 Concepts Explained
+
+#### Monotonic Stack Patterns
+
+All 6 variants follow the same template — the only differences are:
+1. **Direction** — traverse left-to-right (Previous) or right-to-left (Next)
+2. **Comparison** — `>` for Greater, `<` for Smaller
+3. **What you push** — value (element problems) or index (index problems)
+
+```
+Pattern Template:
+  for each element (from correct direction):
+      while stack not empty:
+          if stack.peek() satisfies condition → record result, break
+          else → pop
+      push current element (or index)
+```
+
+**6 Variants at a Glance:**
+
+| Problem | Direction | Condition | Push |
+|---------|-----------|-----------|------|
+| Next Greater Element | Right → Left | `peek > arr[i]` | value |
+| Next Smaller Element | Right → Left | `peek < arr[i]` | value |
+| Previous Greater Element | Left → Right | `peek > arr[i]` | value |
+| Previous Smaller Element | Left → Right | `peek < arr[i]` | value |
+| Previous Smaller Index | Left → Right | `arr[peek] < arr[i]` | index |
+| Next Smaller Index | Right → Left | `arr[peek] < arr[i]` | index |
+
+---
+
+#### Largest Rectangle in Histogram
+
+Uses **Previous Smaller Index** (left boundary) + **Next Smaller Index** (right boundary) for each bar.
+
+```
+Histogram: [2, 1, 5, 6, 2, 3]
+
+For each bar i:
+  width  = nextSmallerIndex[i] - previousSmallerIndex[i] - 1
+  area   = height[i] * width
+  answer = max of all areas
+
+Answer: 10  (bars of height 5 and 6, width 2)
+```
+
+---
+
+#### Queue — Linear (Array-based)
+
+```
+FIFO: First In, First Out
+
+Enqueue 10 → [10]
+Enqueue 20 → [10, 20]
+Enqueue 30 → [10, 20, 30]
+Dequeue    → [20, 30]   (10 removed from front)
+
+front = 0, rear tracks last element
+```
+
+**Problem with linear queue:** after several dequeue+enqueue cycles, rear hits the end even if front has moved — wasted space. Solved by Circular Queue.
+
+---
+
+#### Circular Queue — Array-based
+
+Rear wraps around to index 0 when it reaches the end:
+
+```
+Size = 3
+
+append(10) → [10, _, _]   front=0, rear=0
+append(20) → [10, 20, _]  front=0, rear=1
+append(30) → [10, 20, 30] front=0, rear=2  (FULL)
+dequeue()  → [_, 20, 30]  front=1
+append(50) → [50, 20, 30] rear wraps to 0!
+```
+
+**Key formulas:**
+```
+isFull  : (rear + 1) % size == front
+enqueue : rear = (rear + 1) % size   (or wrap manually)
+dequeue : front = (front + 1) % size
+```
+
+---
+
+### 💻 Key Code Snippets
+
+#### Next Greater Element
+```java
+public static int[] nextGreaterElement(Stack<Integer> stk, int[] arr, int[] res) {
+    stk.clear();
+    for (int i = arr.length - 1; i >= 0; i--) {
+        while (!stk.isEmpty()) {
+            if (stk.peek() > arr[i]) { res[i] = stk.peek(); break; }
+            else stk.pop();
+        }
+        stk.push(arr[i]);
+    }
+    return res;
+}
+// arr = [4, 5, 2, 10, 8] → res = [5, 10, 10, -1, -1]
+```
+
+#### Previous Smaller Element
+```java
+public static int[] previousSmallerElement(Stack<Integer> stk, int[] arr, int[] res) {
+    stk.clear();
+    for (int i = 0; i < arr.length; i++) {
+        while (!stk.isEmpty()) {
+            if (stk.peek() < arr[i]) { res[i] = stk.peek(); break; }
+            else stk.pop();
+        }
+        stk.push(arr[i]);
+    }
+    return res;
+}
+```
+
+#### Previous Smaller Index & Next Smaller Index (used in Histogram)
+```java
+public static int[] previousSmallerIndex(Stack<Integer> stk, int[] arr, int[] res) {
+    stk.clear();
+    for (int i = 0; i < arr.length; i++) {
+        while (!stk.isEmpty()) {
+            if (arr[stk.peek()] < arr[i]) { res[i] = stk.peek(); break; }
+            else stk.pop();
+        }
+        stk.push(i);   // Push INDEX not value
+    }
+    return res;
+}
+
+public static int[] nextSmallerIndex(Stack<Integer> stk, int[] arr, int[] res) {
+    stk.clear();
+    for (int i = arr.length - 1; i >= 0; i--) {
+        while (!stk.isEmpty()) {
+            if (arr[stk.peek()] < arr[i]) { res[i] = stk.peek(); break; }
+            else stk.pop();
+        }
+        stk.push(i);   // Push INDEX not value
+    }
+    return res;
+}
+```
+
+#### Largest Rectangle in Histogram
+```java
+// arr = {2, 1, 5, 6, 2, 3}
+int[] leftRes = new int[n];   Arrays.fill(leftRes, -1);
+int[] rightRes = new int[n];  Arrays.fill(rightRes, n);
+
+leftRes  = previousSmallerIndex(stk, arr, leftRes);
+rightRes = nextSmallerIndex(stk, arr, rightRes);
+
+int maxArea = 0;
+for (int i = 0; i < arr.length; i++) {
+    int window = rightRes[i] - leftRes[i] - 1;
+    maxArea = Math.max(maxArea, arr[i] * window);
+}
+// Output: 10
+```
+
+#### Circular Queue
+```java
+public boolean isFull()  { return (rear + 1) % arr.length == front; }
+public boolean isEmpty() { return front == -1 && rear == -1; }
+
+public int append(int data) {
+    if (isFull())       { System.out.println("Queue is Full"); return 0; }
+    else if (isEmpty()) { rear = 0; front = 0; }
+    else                { rear = (rear == arr.length - 1) ? 0 : rear + 1; }
+    arr[rear] = data;
+    return data;
+}
+
+public int dequeue() {
+    if (isEmpty()) { System.out.println("Queue is Empty !!!"); return -1; }
+    int removed = arr[front];
+    if (rear == front) { front = -1; rear = -1; }
+    else               { front = (front + 1) % arr.length; }
+    return removed;
+}
+```
+
+---
+
+### 🔢 Complexity Analysis
+
+| Problem | Time | Space | Notes |
+|---------|------|-------|-------|
+| Next/Prev Greater/Smaller Element | O(n) | O(n) | Each element pushed/popped once |
+| Next/Prev Smaller Index | O(n) | O(n) | Same pattern, push index |
+| Largest Rectangle in Histogram | O(n) | O(n) | Two index passes + one area pass |
+| Queue (Array) Enqueue | O(1) | O(1) | Direct rear insert |
+| Queue (Array) Dequeue | O(n) | O(1) | Shifts all elements left ⚠️ |
+| Circular Queue Enqueue | O(1) | O(1) | Wrap with modulo |
+| Circular Queue Dequeue | O(1) | O(1) | No shifting needed ⚡ |
+
+---
+
+### 🎨 Visual Examples
+
+**Monotonic Stack — Next Greater Element:**
+```
+arr = [4, 5, 2, 10, 8],  traverse right → left
+
+i=4: stk=[]       → res[4]=-1, push 8    stk=[8]
+i=3: 8 < 10, pop  → stk=[], res[3]=-1,   push 10  stk=[10]
+i=2: 10 > 2       → res[2]=10, push 2    stk=[10,2]
+i=1: 2 < 5, pop; 10 > 5 → res[1]=10, push 5  stk=[10,5]
+i=0: 5 > 4        → res[0]=5,  push 4    stk=[10,5,4]
+
+Result: [5, 10, 10, -1, -1]
+```
+
+**Circular Queue Wrap-around:**
+```
+size=3: append(10)→append(20)→append(30)→dequeue()→append(50)
+
+Index:   0    1    2
+         [50, 20, 30]
+              ▲    ▲
+            front  rear=0 (wrapped!)
+```
+
+---
+
+### 🧪 Practice Problems
+
+**🟢 Easy**
+1. Find Next Greater Element for every array element
+2. Find Previous Smaller Element for every array element
+3. Implement a basic Queue using array
+
+**🟡 Medium**
+4. Find Next Greater Element index (not value)
+5. Implement Circular Queue with all edge cases
+6. Daily Temperatures (LeetCode #739) — Next Greater variant
+
+**🔴 Hard**
+7. Largest Rectangle in Histogram (LeetCode #84)
+8. Maximal Rectangle (LeetCode #85) — uses histogram approach per row
+9. Sum of Subarray Minimums (LeetCode #907) — uses previous/next smaller
+
+---
+
+### ⚠️ Common Mistakes
+
+| ❌ Mistake | ✅ Solution |
+|-----------|-----------|
+| Using value instead of index in histogram | Push `i` not `arr[i]` for index variants |
+| Wrong default fill for index arrays | `fill(left, -1)` and `fill(right, n)` — boundaries matter |
+| Linear queue "false full" | Use circular queue; rear wrapping fixes wasted space |
+| Forgetting to reset `front=rear=-1` when last element dequeued | Check `front == rear` before advancing pointers |
+| `isFull` check wrong in circular queue | Must be `(rear + 1) % size == front`, not `rear == size-1` |
+
+---
+
+### 📌 Key Takeaways
+
+💡 **All 6 stack variants share one template** — change direction + comparison operator  
+💡 **Histogram = Previous Smaller Index + Next Smaller Index** — two passes, one answer  
+💡 **Circular Queue fixes wasted space** in linear queues using modulo wrap-around  
+💡 **O(n) for monotonic stack** — each element is pushed and popped at most once  
+💡 **Index variants** store indices on stack; compare `arr[stk.peek()]` not `stk.peek()`
+
+---
+
 # 🔧 Reference Materials
 
 ## Big O Complexity Cheat Sheet
@@ -1299,6 +1586,8 @@ Visual Comparison (which is faster?):
 ```
 
 ---
+
+
 
 ## Data Structure Complexity Quick Reference
 

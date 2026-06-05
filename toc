@@ -2,9 +2,9 @@
 // Doubly and Circular Linked List
 // Collections
 // Stack
-
-// QUeues
+// Queues
 // Two Pointer || Sliding window
+
 // Recursion and BackTracking
 // Binary Trees
 // Binary Search Trees
