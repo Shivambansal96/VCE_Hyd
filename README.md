@@ -32,7 +32,8 @@ This repository is your complete companion for understanding how data is organiz
 | 🔴 Done | **Day 3** | [Collections Framework](#day-3-collections-framework) | 🟡 Medium | `Day3Collections.java` |
 | 🔴 Done | **Day 4** | [Stacks](#day-4-stacks) | 🟡 Medium | `Day4Stacks.java` |
 | 🔴 Done | **Day 5** | [Stack Applications & Queues](#day-5-stack-applications--queues) | 🔴 Hard | `Day5Queues.java` |
-| ⚪ Coming | **Day 6-7** | [Queues](#day-6-7-two-pointer--recursion--backTracking) | 🟡 Medium | `Day6Queue.java` |
+| 🔴 Done | **Day 6** | [Two Pointers](#day-6-two-pointers) | 🟡 Medium | `Day6TwoPointers.java` |
+| ⚪ Coming | **Day 7** | [Recursion & Backtracking](#day-7-recursion--backTracking) | 🟡 Medium | `Day7Recursion.java` |
 | ⚪ Coming | **Day 8-10** | [Trees & BST](#day-8-10-trees--binary-search-trees) | 🔴 Hard | `Day8Tree.java` |
 | ⚪ Coming | **Day 11-12** | [Graphs](#day-11-12-graphs) | 🔴 Hard | `Day11Graph.java` |
 
@@ -1560,6 +1561,433 @@ Index:   0    1    2
 
 ---
 
+
+---
+
+## Day 6: Two Pointers
+
+**Status**: 🔴 **COMPLETED** | **Difficulty**: 🟡 **Medium** | **File**: `Day6TwoPointers.java`
+
+### 🎯 What You'll Learn
+- Master the **Two Pointer Technique** across 4 different patterns
+- Solve **String Problems**: Palindrome checking, character matching
+- Implement **Array Merging**: Merge two sorted arrays efficiently
+- Apply **Sliding Window**: Find longest substring without repeats
+- Solve **Optimization Problems**: Container with Most Water
+
+### 📚 Concepts Explained
+
+#### What is the Two Pointer Technique?
+
+The **Two Pointer Technique** uses two pointers (indices) that move through a data structure (usually an array or string) to solve problems efficiently. Instead of nested loops (O(n²)), we traverse smartly with two pointers, achieving O(n) in many cases.
+
+**Core Idea:**
+Instead of:   Nested loops → O(n²) ❌
+Use:          Two pointers → O(n) ✅
+
+#### 4 Types of Two Pointer Patterns
+
+**Type 1: Opposite Direction Pointers** (Start and End)
+Left pointer at start → Right pointer at end
+They move TOWARDS each other until they meet
+Use cases: Palindrome, reversal, container problems
+
+**Type 2: Same Direction Pointers** (Slow and Fast)
+Both start at beginning
+Fast pointer moves ahead → Slow pointer follows
+They maintain a window/gap
+Use cases: Remove duplicates, linked list cycle detection
+
+**Type 3: Sliding Window** (Variable Window)
+Left and right pointers define a window
+Window size changes based on conditions
+Track max/min within the window
+Use cases: Longest substring, max sum subarray
+
+**Type 4: Fixed Window** (Constant Size)
+Two pointers maintain fixed distance
+Slide together across array
+Calculate sum/avg for each window
+Use cases: Maximum average subarray, k-size window
+
+---
+
+### 💻 Key Code Snippets
+
+#### Type 1: Palindrome Check (Opposite Direction)
+```java
+public static void palindrome() {
+    // Time: O(n) | Space: O(1)
+    
+    String original = "racecar";
+    int left = 0;
+    int right = original.length() - 1;
+    boolean flag = true;
+    
+    while (left <= right) {
+        if (original.charAt(left) != original.charAt(right)) {
+            flag = false;
+            break;
+        }
+        left++;      // Move left pointer forward
+        right--;     // Move right pointer backward
+    }
+    
+    System.out.println(flag ? "Palindrome" : "Not Palindrome");
+    // Output: Palindrome ✓
+}
+```
+
+**Why it works:**
+"racecar"
+^    ^
+l    r   → Compare 'r' == 'r' ✓
+^  ^
+l  r    → Compare 'a' == 'a' ✓
+^^
+lr     → Compare 'c' == 'c' ✓
+Pointers meet → All matched → Palindrome!
+
+---
+
+#### Type 2: Remove Duplicates (Same Direction - Slow & Fast)
+```java
+public static void removeDuplicates() {
+    // Time: O(n) | Space: O(1)
+    
+    int[] arr = {2, 5, 2, 4, 4, 2, 5};
+    Arrays.sort(arr);  // [2, 2, 2, 4, 4, 5, 5]
+    
+    int i = 0;  // Slow pointer - position to place unique element
+    
+    while (i < arr.length) {
+        arr[i] added to result
+        
+        int j = i + 1;  // Fast pointer - find next different element
+        while (j < arr.length && arr[j] == arr[i]) {
+            j++;  // Skip duplicates
+        }
+        
+        i = j;  // Move slow pointer to next different element
+    }
+    
+    // Result: [2, 4, 5] - unique elements only
+}
+```
+
+**Pointer Movement Visualization:**
+Array:  [2, 2, 2, 4, 4, 5, 5]
+i           (add 2)
+j j j   (skip 2s, jump to 4)
+     i       (add 4)
+         j j (skip 4s)
+    
+     i       (add 5)
+             (no more duplicates)
+
+---
+
+#### Type 3: Sliding Window - Longest Substring Without Repeats
+```java
+public static void longestSubstring() {
+    // Time: O(n) | Space: O(1) - at most 26 characters
+    
+    Set<Character> set = new HashSet<>();
+    String s = "abcabbcab";
+    
+    int left = 0;
+    int maxLength = 0;
+    
+    for (int right = 0; right < s.length(); right++) {
+        // If character already exists, shrink window from left
+        while (set.contains(s.charAt(right))) {
+            set.remove(s.charAt(left));
+            left++;
+        }
+        
+        // Add current character
+        set.add(s.charAt(right));
+        
+        // Update max length
+        int window = right - left + 1;
+        maxLength = Math.max(window, maxLength);
+    }
+    
+    System.out.println(maxLength);  // Output: 3 ("abc" or "cab")
+}
+```
+
+**Window Expansion & Contraction:**
+String: "abcabbcab"
+Window progression:
+"a"      → length 1
+"ab"     → length 2
+"abc"    → length 3 (maxLength = 3)
+"cab"    → shrink: "ab" → "cab" → length 3
+...
+Answer: 3
+
+---
+
+#### Type 3: Max Average Subarray (Fixed Window)
+```java
+public static void maxAvgSubarray() {
+    // Time: O(n) | Space: O(1)
+    
+    int[] arr = {1, 12, -5, -6, 50, 3};
+    int k = 4;  // Window size
+    
+    int i = 0;
+    int j = 0;
+    int currentSum = 0;
+    int maxSum = 0;
+    
+    // Build initial window
+    while (j < k) {
+        currentSum += arr[j];
+        j++;
+    }
+    maxSum = currentSum;
+    
+    // Slide the window: add new element, remove old element
+    while (j < arr.length) {
+        currentSum += arr[j];        // Add new right element
+        currentSum -= arr[i];        // Remove old left element
+        maxSum = Math.max(currentSum, maxSum);
+        i++;
+        j++;
+    }
+    
+    System.out.println(maxSum / k);  // Average
+}
+```
+
+**Window Sliding Technique:**
+Array: [1, 12, -5, -6, 50, 3], K = 4
+Window 1: [1, 12, -5, -6]  → Sum = 2
+Window 2: [12, -5, -6, 50] → Sum = 51  ✓ Max
+Window 3: [-5, -6, 50, 3]  → Sum = 42
+Answer: maxSum = 51, average = 51/4 = 12
+
+---
+
+#### Type 4: Merge Two Sorted Arrays (Opposite Direction - Merge Pattern)
+```java
+public static void mergeSortedArrays() {
+    // Time: O(n + m) | Space: O(n + m)
+    
+    int[] arr1 = {2, 5, 9, 12};
+    int[] arr2 = {4, 8, 16};
+    int[] res = new int[arr1.length + arr2.length];
+    
+    int i = 0;      // Pointer for arr1
+    int j = 0;      // Pointer for arr2
+    int resIndex = 0;  // Pointer for result array
+    
+    // Merge while both arrays have elements
+    while (i < arr1.length && j < arr2.length) {
+        if (arr1[i] < arr2[j]) {
+            res[resIndex++] = arr1[i++];
+        } else {
+            res[resIndex++] = arr2[j++];
+        }
+    }
+    
+    // Add remaining elements from arr1
+    while (i < arr1.length) {
+        res[resIndex++] = arr1[i++];
+    }
+    
+    // Add remaining elements from arr2
+    while (j < arr2.length) {
+        res[resIndex++] = arr2[j++];
+    }
+    
+    // Result: [2, 4, 5, 8, 9, 12, 16]
+}
+```
+
+**Merging Process:**
+arr1 = [2, 5, 9, 12]
+arr2 = [4, 8, 16]
+Compare 2 vs 4 → 2 is smaller → Add 2
+Compare 5 vs 4 → 4 is smaller → Add 4
+Compare 5 vs 8 → 5 is smaller → Add 5
+Compare 9 vs 8 → 8 is smaller → Add 8
+Compare 9 vs 16 → 9 is smaller → Add 9
+Compare 12 vs 16 → 12 is smaller → Add 12
+arr2 still has 16 → Add 16
+Result: [2, 4, 5, 8, 9, 12, 16] ✓
+
+---
+
+#### Type 4: Container with Most Water (Optimization)
+```java
+public static void containerWithMostWater() {
+    // Time: O(n) | Space: O(1)
+    
+    int[] height = {1, 8, 6, 2, 5, 4, 8, 3, 7};
+    
+    int left = 0;
+    int right = height.length - 1;
+    int maxWater = 0;
+    
+    while (left < right) {
+        // Width = distance between pointers
+        int width = right - left;
+        
+        // Height = minimum of two heights
+        int h = Math.min(height[left], height[right]);
+        
+        // Area = width × height
+        int currentWater = h * width;
+        maxWater = Math.max(maxWater, currentWater);
+        
+        // Move the pointer with smaller height
+        // Why? To find potentially taller bar
+        if (height[left] < height[right]) {
+            left++;
+        } else {
+            right--;
+        }
+    }
+    
+    System.out.println(maxWater);  // Output: 49
+}
+```
+
+**Why Move Smaller Pointer?**
+height = [1, 8, 6, 2, 5, 4, 8, 3, 7]
+^                          ^
+left                       right
+area = min(1, 7) × 8 = 1 × 8 = 8
+Moving right won't help (width decreases, height capped at 1)
+So move left to find taller bar:
+^                       ^
+left                  right
+area = min(8, 7) × 7 = 7 × 7 = 49 ✓ Much better!
+
+---
+
+### 🔢 Complexity Comparison
+
+| Problem | Type | Time | Space | Notes |
+|---------|------|------|-------|-------|
+| **Palindrome** | Opposite | O(n) | O(1) | Compare from ends |
+| **Remove Duplicates** | Slow/Fast | O(n) | O(1) | In-place removal |
+| **Longest Substring** | Sliding Window | O(n) | O(1)* | Window expands/shrinks |
+| **Max Avg Subarray** | Fixed Window | O(n) | O(1) | Constant k-size window |
+| **Merge Arrays** | Merge Pattern | O(n+m) | O(n+m) | Requires result array |
+| **Container Water** | Greedy+Two Ptr | O(n) | O(1) | Move smaller height |
+
+*O(m) where m = character set size (26 for English)
+
+---
+
+### 🎨 Visual Examples
+
+**Palindrome Check Animation:**
+"racecar"
+↙   ↖
+l   r   Match? YES
+↙ ↖
+l r    Match? YES
+↙↖
+lr    Match? YES
+Pointers crossed → PALINDROME! ✓
+
+**Sliding Window Growth & Shrink:**
+String: "abcabbcab"
+[a]         → length 1
+[ab]        → length 2
+[abc]       → length 3 ✓ MAX
+[ab]c       → 'c' duplicate, shrink
+[abc]ab     → length 3
+[cab]       → length 3
+[ab]ca      → 'a' duplicate, shrink
+...
+Final Answer: 3
+
+**Container with Most Water Optimization:**
+Heights: [1, 8, 6, 2, 5, 4, 8, 3, 7]
+[0,    1,       2,       3,    8]
+left=0, right=8
+area = min(1,7) × 8 = 8
+left=1, right=8
+area = min(8,7) × 7 = 49 ← BEST!
+left=2, right=8
+area = min(6,7) × 6 = 36
+Continue until pointers meet...
+Answer: 49
+
+---
+
+### 🧪 Practice Problems
+
+**🟢 Easy**
+1. Check if string is palindrome
+2. Reverse a string using two pointers
+3. Merge two sorted arrays
+4. Check if array is sorted
+
+**🟡 Medium**
+5. Longest substring without repeating characters
+6. Maximum average subarray of size k
+7. Container with most water
+8. Remove duplicates from sorted array
+9. Two sum (sorted array) - find two numbers that sum to target
+10. Valid palindrome (ignore non-alphanumeric characters)
+
+**🔴 Hard**
+11. Trapping rain water (LeetCode #42)
+12. Minimum window substring
+13. Longest substring with k distinct characters
+14. Three sum (find three numbers that sum to 0) - uses two pointers with loop
+
+---
+
+### ⚠️ Common Mistakes
+
+| ❌ Mistake | ✅ Solution | 💭 Why It Matters |
+|-----------|-----------|-------------------|
+| Forgetting to move pointers | Always increment/decrement in loop | Infinite loop otherwise! |
+| Wrong pointer movement direction | For palindrome: left++, right-- | Opposite directions needed |
+| Comparing wrong characters in palindrome | Use `charAt(left)` not `arr[left]` | Strings need charAt() |
+| Not handling overlapping window correctly | Use `while (set.contains())` before adding | Prevents duplicates in set |
+| Moving wrong pointer in container problem | Move pointer with SMALLER height | Moving taller won't increase area |
+| Forgetting remaining elements after merge | Always add leftover from both arrays | Incomplete merge otherwise |
+| Using >= instead of > in comparisons | Be precise with boundary conditions | Off-by-one errors happen |
+| Not tracking the correct window size | For fixed window: use `j - i + 1` | Incorrect area calculation |
+
+---
+
+### 🔗 External Resources
+
+- 📺 **VisuAlgo - Sorting**: [Visualize Two Pointer Merge](https://visualgo.net/en/sorting)
+- 📖 **GeeksforGeeks**: [Two Pointer Technique](https://www.geeksforgeeks.org/two-pointers-technique/)
+- 📖 **LeetCode Problems**:
+  - Valid Palindrome (#125)
+  - Container with Most Water (#11)
+  - Longest Substring Without Repeating (#3)
+  - Merge Sorted Array (#88)
+- 🎥 **YouTube**: "Two Pointer Technique Explained" - Code with Harry
+
+---
+
+### 📌 Key Takeaways
+
+💡 **Two Pointers = O(n) instead of O(n²)** for many problems  
+💡 **Opposite direction** for palindrome, merging, water trapping  
+💡 **Same direction (slow/fast)** for duplicates, cycle detection  
+💡 **Sliding window** expands/shrinks based on condition  
+💡 **Fixed window** has constant size, slides linearly  
+💡 **Greedy choice** in container problem: move smaller height pointer  
+💡 **Always check boundaries** with <= or < to avoid off-by-one errors  
+
+---
+
+<!-- End of Day 6: Two Pointers -->
+
 # 🔧 Reference Materials
 
 ## Big O Complexity Cheat Sheet
@@ -1719,27 +2147,6 @@ while (current != null) {
     current = current.next;  // Progress through list
 }
 ```
-
----
-
-## 🎓 Your Progress Tracker
-
-Complete each day as you progress! 🚀
-
-- [ ] **Day 1**: Singly Linked List ✏️
-- [ ] **Day 2**: Doubly & Circular LL ✏️
-- [ ] **Day 3**: Stack Operations ✏️
-- [ ] **Day 4**: Stack Applications ✏️
-- [ ] **Day 5**: Queue Operations ✏️
-- [ ] **Day 6**: Circular & Deque ✏️
-- [ ] **Day 7**: Binary Search Trees ✏️
-- [ ] **Day 8**: Tree Traversals Part 1 ✏️
-- [ ] **Day 9**: Tree Traversals Part 2 ✏️
-- [ ] **Day 10**: Graphs & DFS/BFS ✏️
-- [ ] **Day 11**: Shortest Path & Algorithms ✏️
-- [ ] **Day 12**: Dynamic Programming ✏️
-
-### Completion Score: [ ___ / 12 ]
 
 ---
 
