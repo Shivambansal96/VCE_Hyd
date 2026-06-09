@@ -33,7 +33,7 @@ This repository is your complete companion for understanding how data is organiz
 | 🔴 Done | **Day 4** | [Stacks](#day-4-stacks) | 🟡 Medium | `Day4Stacks.java` |
 | 🔴 Done | **Day 5** | [Stack Applications & Queues](#day-5-stack-applications--queues) | 🔴 Hard | `Day5Queues.java` |
 | 🔴 Done | **Day 6** | [Two Pointers](#day-6-two-pointers) | 🟡 Medium | `Day6TwoPointers.java` |
-| ⚪ Coming | **Day 7** | [Recursion & Backtracking](#day-7-recursion--backTracking) | 🟡 Medium | `Day7Recursion.java` |
+| 🔴 Done | **Day 7** | [Recursion & Backtracking](#day-7-recursion--backtracking) | 🟡 Medium | `Day7Recursion.java` |
 | ⚪ Coming | **Day 8-10** | [Trees & BST](#day-8-10-trees--binary-search-trees) | 🔴 Hard | `Day8Tree.java` |
 | ⚪ Coming | **Day 11-12** | [Graphs](#day-11-12-graphs) | 🔴 Hard | `Day11Graph.java` |
 
@@ -51,6 +51,7 @@ By the end of this 12-day intensive, you will be able to:
 ✅ **Solve Real Problems**: Apply DSA concepts to solve algorithmic challenges  
 ✅ **Ace Interviews**: Be confident in coding interviews that test DSA knowledge  
 ✅ **Write Efficient Code**: Optimize solutions for performance and memory usage  
+✅ **Master Recursion & Backtracking**: Solve complex problems using divide-and-conquer, merge sort, and path finding
 
 ### Prerequisites
 
@@ -62,11 +63,13 @@ By the end of this 12-day intensive, you will be able to:
 ### 12-Day Syllabus at a Glance
 
 ```
-WEEK 1                          WEEK 2                           WEEK 3
-Day 1: Singly LL       ├──────► Day 4: Stacks         ├──────► Day 8: Trees
-Day 2: Doubly/Circ LL  ├──────► Day 5: Stack Apps    │         Day 9: BST
-Day 3: Collections     ├──────► Day 6: Queues        │         Day 10: Tree Traversals
-Day 4: Stacks          └──────► Day 7: Deque & PQ    └──────► Day 11-12: Graphs & DP
+WEEK 1                          WEEK 2                           
+Day 1: Singly LL       ├──────► Day 7: Recursion         
+Day 2: Doubly/Circ LL  ├──────► Day 8: Binary Tree    
+Day 3: Collections     ├──────► Day 9: Binary Search Tree  
+Day 4: Stacks          ├──────► Day 10: Graphs         
+Day 5: Stack Apps      ├──────► Day 11: Dynamic Programming
+Day 6: Two Pointers    ├──────► Day 12: Dynamic Programming + Heap
 ```
 
 ---
@@ -1987,6 +1990,941 @@ Answer: 49
 ---
 
 <!-- End of Day 6: Two Pointers -->
+
+
+## Day 7: Recursion & Backtracking
+
+**Status**: 🔴 **COMPLETED** | **Difficulty**: 🟡 **Medium** | **File**: `Day7Recursion.java`
+
+### 🎯 What You'll Learn
+- Master the **Call Stack** and how recursion works internally
+- Implement **Base Cases** and **Recursive Cases** correctly
+- Solve problems using **Tail Recursion** vs **Tree Recursion**
+- Calculate **Permutations & Combinations** using factorial recursion
+- Implement **Merge Sort** - O(n log n) divide-and-conquer algorithm
+- Master **Backtracking** with path counting in grids
+- Understand trade-offs: recursion vs iteration (time, space, readability)
+
+### 📚 Concepts Explained
+
+#### What is Recursion?
+
+**Recursion** is a technique where a function calls itself to solve smaller instances of the same problem until reaching a base case.
+Every Recursive Function Must Have:
+┌─────────────────────────────────────┐
+│ 1. BASE CASE (Stop condition)      │
+│    if (n == 0) return 0;           │
+│                                     │
+│ 2. RECURSIVE CASE (Progress toward base)
+│    return n + func(n-1);           │
+│                                     │
+│ 3. TRUST THE RECURSION             │
+│    Don't overthink; trust it works │
+└─────────────────────────────────────┘
+
+#### The Call Stack Visualization
+
+When you call a recursive function, each call is **pushed** onto the call stack:
+printDescending(5):
+print 5
+Call → printDescending(4)
+print 4
+Call → printDescending(3)
+print 3
+Call → printDescending(2)
+print 2
+Call → printDescending(1)
+print 1
+Call → printDescending(0)
+BASE CASE! Return
+Return
+Return
+Return
+Return
+Return
+Output: 5 4 3 2 1
+
+**Key Insight:** Functions are executed in **LIFO order** (Last-In-First-Out) - just like a stack! 📚
+
+#### BEFORE & AFTER Pattern
+
+When you have code BEFORE and AFTER the recursive call:
+
+```java
+public static void function(int n) {
+    if (n == 0) return;
+    
+    System.out.println("BEFORE: " + n);  ← Executes DESCENDING
+    function(n - 1);
+    System.out.println("AFTER: " + n);   ← Executes ASCENDING
+}
+
+function(3):
+BEFORE: 3
+BEFORE: 2
+BEFORE: 1
+AFTER: 1
+AFTER: 2
+AFTER: 3
+```
+
+This is because the AFTER code is in the **return phase** of the call stack!
+
+---
+
+### 💻 Key Code Snippets
+
+#### Learning the Call Stack
+```java
+public static int learningCallStack(int n) {
+    if (n == 0) {
+        return 0;
+    }
+    
+    System.out.println("BEFORE: " + n);
+    learningCallStack(n - 1);
+    System.out.println("AFTER: " + n);
+    
+    return 0;
+}
+
+// Call: learningCallStack(3)
+// Output:
+// BEFORE: 3
+// BEFORE: 2
+// BEFORE: 1
+// AFTER: 1
+// AFTER: 2
+// AFTER: 3
+```
+
+#### Print Descending (1 to N)
+```java
+public static int printDescending(int n) {
+    // BASE CASE
+    if (n == 0) {
+        return 0;
+    }
+    
+    System.out.println(n);                 // Print current
+    return printDescending(n - 1);         // Recurse smaller
+}
+
+// printDescending(5) → Output: 5 4 3 2 1
+// Time: O(n) | Space: O(n) call stack depth
+```
+
+#### Print Ascending (1 to N)
+```java
+public static int printAscending(int n, int i) {
+    // BASE CASE: when i exceeds n, stop
+    if (i == n + 1) {
+        return 0;
+    }
+    
+    System.out.println(i);                 // Print current
+    return printAscending(n, i + 1);       // Increment and recurse
+}
+
+// printAscending(5, 1) → Output: 1 2 3 4 5
+// Time: O(n) | Space: O(n)
+```
+
+#### Sum of N Natural Numbers
+```java
+public static int sumOfNaturalNumbers(int n) {
+    // BASE CASE
+    if (n == 0) {
+        return 0;
+    }
+    
+    // RECURSIVE CASE: n + sum of (n-1) natural numbers
+    return n + sumOfNaturalNumbers(n - 1);
+}
+
+// sumOfNaturalNumbers(5) = 5 + 4 + 3 + 2 + 1 = 15
+// Time: O(n) | Space: O(n)
+```
+
+**Trace:**
+sum(5) = 5 + sum(4)
+= 5 + (4 + sum(3))
+= 5 + (4 + (3 + sum(2)))
+= 5 + (4 + (3 + (2 + sum(1))))
+= 5 + (4 + (3 + (2 + (1 + sum(0)))))
+= 5 + (4 + (3 + (2 + (1 + 0))))
+= 15
+
+#### Factorial (n!)
+```java
+public static int factorial(int n) {
+    // BASE CASE
+    if (n == 0) {
+        return 1;  // 0! = 1
+    }
+    
+    // RECURSIVE CASE: n! = n × (n-1)!
+    return n * factorial(n - 1);
+}
+
+// factorial(5) = 5 × 4 × 3 × 2 × 1 = 120
+// Time: O(n) | Space: O(n)
+```
+
+#### Permutations P(n, r) = n! / (n-r)!
+```java
+public static void permutation(int n, int r) {
+    // P(n, r) = n! / (n-r)!
+    int num = factorial(n);           // Get n!
+    int denom = factorial(n - r);     // Get (n-r)!
+    System.out.println("Permutation = " + num / denom);
+}
+
+// Example: P(5, 3) = 5! / 2! = 120 / 2 = 60
+// Meaning: Ways to arrange 3 items from 5
+```
+
+#### Combinations C(n, r) = n! / (r! × (n-r)!)
+```java
+public static void combination(int n, int r) {
+    // C(n, r) = n! / (r! × (n-r)!)
+    int num = factorial(n);
+    int denom = factorial(r) * factorial(n - r);
+    System.out.println("Combination = " + num / denom);
+}
+
+// Example: C(5, 3) = 5! / (3! × 2!) = 120 / 12 = 10
+// Meaning: Ways to choose 3 items from 5 (order doesn't matter)
+```
+
+#### Merge Sort - Divide & Conquer
+```java
+public static void mergeSort(int[] arr, int left, int right) {
+    // BASE CASE: single element is sorted
+    if (left >= right) {
+        return;
+    }
+    
+    // DIVIDE: find middle
+    int mid = left + (right - left) / 2;
+    
+    // CONQUER: recursively sort left half
+    mergeSort(arr, left, mid);
+    
+    // CONQUER: recursively sort right half
+    mergeSort(arr, mid + 1, right);
+    
+    // COMBINE: merge two sorted halves
+    merge(arr, left, mid, right);
+}
+
+// Example: mergeSort([5, 1, 2, 3, 10, 4], 0, 5)
+// Output: [1, 2, 3, 4, 5, 10]
+// Time: O(n log n) | Space: O(n)
+```
+
+**Merge Sort Visualization:**
+[5, 1, 2, 3, 10, 4]
+Divide Phase:
+├─ [5, 1, 2]
+│  ├─ [5, 1]
+│  │  ├─ [5]
+│  │  └─ [1]
+│  └─ [2]
+└─ [3, 10, 4]
+├─ [3, 10]
+│  ├─ [3]
+│  └─ [10]
+└─ [4]
+Merge Phase (Combining):
+├─ [1, 5] (from [5] and [1])
+├─ [2]
+├─ [1, 2, 5]
+├─ [3, 10]
+├─ [4]
+└─ [1, 2, 3, 4, 5, 10]
+
+#### Backtracking - Count Paths in Grid
+```java
+public static int countTotalPaths(int i, int j, int n, int m) {
+    // DEAD END: Out of bounds
+    if (i == n || j == m) {
+        return 0;
+    }
+    
+    // DESTINATION: Reached bottom-right corner
+    if (i == n - 1 && j == m - 1) {
+        return 1;
+    }
+    
+    // MOVE RIGHT
+    int right = countTotalPaths(i, j + 1, n, m);
+    
+    // MOVE DOWN
+    int down = countTotalPaths(i + 1, j, n, m);
+    
+    return right + down;
+}
+
+// countTotalPaths(0, 0, 4, 4) = 20
+// (Number of ways to reach (3,3) from (0,0))
+// Can only move RIGHT or DOWN
+```
+
+**4×4 Grid Paths Visualization:**
+Grid: 4 rows × 4 cols
+Start: (0,0) → End: (3,3)
+Only moves: RIGHT or DOWN
+Total Paths = 20
+(This is a combinatorial problem: C(6, 3) = 20)
+Explanation: You need exactly 3 rights and 3 downs = 6 moves total
+Choose 3 positions for RIGHT = C(6,3) = 20
+
+---
+
+### 🔢 Complexity Analysis
+
+| Problem | Time | Space | Type | Notes |
+|---------|------|-------|------|-------|
+| **Print N to 1** | O(n) | O(n) | Linear | Call stack depth = n |
+| **Factorial** | O(n) | O(n) | Linear | Compute n! |
+| **Merge Sort** | O(n log n) | O(n) | Divide-Conquer | Best sorting algorithm |
+| **Count Paths** | O(2^(n+m)) | O(n+m) | Exponential | Can be optimized with DP |
+| **Sum of N** | O(n) | O(n) | Linear | Simple recursion |
+| **Permutation** | O(n) | O(n) | Linear | Factorial computation |
+| **Combination** | O(n) | O(n) | Linear | Factorial computation |
+
+---
+
+### 🎨 Visual Examples
+
+**Factorial Tree:**
+fact(5)
+├─ 5 * fact(4)
+│   ├─ 4 * fact(3)
+│   │   ├─ 3 * fact(2)
+│   │   │   ├─ 2 * fact(1)
+│   │   │   │   ├─ 1 * fact(0)
+│   │   │   │   │   └─ BASE: return 1
+│   │   │   │   └─ 1 * 1 = 1
+│   │   │   └─ 2 * 1 = 2
+│   │   └─ 3 * 2 = 6
+│   └─ 4 * 6 = 24
+└─ 5 * 24 = 120
+
+**Merge Sort Tree:**
+[5, 1, 2, 3, 10, 4]
+|
+┌───┴───┐
+[5,1,2] [3,10,4]
+|         |
+┌─┴─┐     ┌─┴─┐
+[5,1] [2] [3,10] [4]
+|              |
+┌─┴─┐          ┌─┴─┐
+[5] [1]       [3][10]
+Merge phase combines: [1,5,2] → [1,2,5]
+Then merges: [1,2,5,3,4,10] → [1,2,3,4,5,10]
+
+---
+
+### 🧪 Practice Problems
+
+**🟢 Easy**
+1. Print numbers 1 to N
+2. Print numbers N to 1
+3. Calculate factorial of a number
+4. Sum of first N natural numbers
+5. Count digits in a number
+
+**🟡 Medium**
+6. Permutation P(n, r)
+7. Combination C(n, r)
+8. Merge sort implementation
+9. Count paths in an N×M grid (only RIGHT and DOWN)
+10. Power of a number: x^n
+
+**🔴 Hard**
+11. N-Queens problem (place N queens on N×N board)
+12. Rat in Maze (find all paths with obstacles)
+13. Word Search (find word in 2D grid)
+14. Palindrome Partitioning (partition string into palindromes)
+15. Sudoku Solver (using backtracking)
+
+---
+
+### ⚠️ Common Mistakes
+
+| ❌ Mistake | ✅ Solution | 💭 Why It Matters |
+|-----------|-----------|------------------|
+| Forgetting base case | Always define stopping condition | Infinite recursion → Stack overflow! |
+| Wrong base case | Base case must handle smallest input | Infinite loops or wrong answers |
+| Not progressing toward base | Ensure recursion "shrinks" problem | Otherwise never reach base case |
+| Modifying problem input by accident | Be careful with array/object mutations | Changes affect all recursive calls |
+| Stack overflow on deep recursion | Use iteration for large N or optimize with DP | RecursionError for N > 1000 |
+| Returning wrong value from base | Base case should return correct identity | Wrong initial value ruins result |
+| Not understanding call stack order | BEFORE/AFTER tell you execution order | Code after call runs in RETURN phase |
+| Using too much memory | Recursion uses O(n) stack space | Not efficient for very large N |
+
+---
+
+### 🔗 External Resources
+
+- 📺 **VisuAlgo - Sorting**: [Merge Sort Visualization](https://visualgo.net/en/sorting)
+- 📖 **GeeksforGeeks**: [Recursion Guide](https://www.geeksforgeeks.org/recursion/)
+- 📖 **Backtracking Patterns**: [Backtracking Explained](https://www.geeksforgeeks.org/backtracking-algorithms/)
+- 💡 **LeetCode Problems**:
+  - Merge Intervals (#56)
+  - Generate Parentheses (#22)
+  - Permutations (#46)
+  - Combinations (#77)
+  - Sudoku Solver (#37)
+  - N-Queens (#51)
+- 🎥 **YouTube**: "Recursion & Backtracking Explained" - Abdul Bari
+
+---
+
+### 📌 Key Takeaways
+
+💡 **Every recursive function needs a base case** — or infinite recursion!  
+💡 **BEFORE/AFTER pattern** reveals call stack order — one descends, one ascends  
+💡 **Merge Sort = O(n log n)** — Divide-and-conquer is powerful  
+💡 **Backtracking = Recursion + Constraint checking** — Try all paths smartly  
+💡 **Call stack depth = recursion depth** — Watch memory on deep recursions  
+💡 **Trust the recursion!** — Solve the smaller problem; it will work  
+💡 **Recursion vs Iteration** — Recursion is elegant but uses more memory  
+💡 **Permutation (ordered) vs Combination (unordered)** — Know the difference for counting problems!
+
+<!-- End of Day 7: Recursion -->
+
+---
+
+## Day 8: Trees & Binary Trees
+
+**Status**: 🔴 **COMPLETED** | **Difficulty**: 🔴 **Hard** | **File**: `Day8Recursion.java` & `Day8BT.java`
+
+### 🎯 What You'll Learn
+- Understand **Tree Data Structure** and terminology (root, leaf, parent, child)
+- Master **Binary Trees** and how to construct them from arrays
+- Implement **Tree Traversals**: Inorder, Preorder, and Postorder
+- Solve **Spiral Matrix** problem using recursion with boundary tracking
+- Build trees from **array representation** with -1 as null marker
+- Understand **Recursion in Trees** - DFS (Depth-First Search)
+- Calculate tree properties: height, diameter, path sum
+
+### 📚 Concepts Explained
+
+#### What is a Tree?
+
+A **Tree** is a hierarchical data structure consisting of **nodes** connected by **edges**. Each node has:
+- **Data**: The value stored
+- **Children**: References to child nodes (0 or more)
+   1 (Root - no parent)
+  / \
+ 2   3
+/ \
+4   5
+/
+6 (Leaf - no children)
+
+Terminology:
+
+Root: Node with no parent (1)
+Leaf: Node with no children (6, 3, 5)
+Parent: Node with children (1, 2)
+Child: Node with parent (2, 3, 4, 5, 6)
+Height: Longest path from root to leaf
+Depth: Distance from root
+Edge: Connection between nodes
+
+#### Binary Tree
+
+A **Binary Tree** is a tree where each node has **at most 2 children** (left and right).
+   1
+  / \
+ 2   3  ← Binary (≤ 2 children per node)
+/ \
+4 5
+
+NOT Binary: 1 /|
+2 3 4 ← 3 children! Not binary
+
+
+**Node Structure:**
+```java
+class Node {
+    int data;
+    Node left;
+    Node right;
+    
+    Node(int data) {
+        this.data = data;
+        this.left = null;
+        this.right = null;
+    }
+}
+```
+
+#### Tree Representation as Array
+
+Trees can be represented as arrays where **-1 represents null**:
+Array: [5, 3, -1, 8, -1, -1, 2, 1, -1, -1, 5, -1, -1]
+
+Preorder traversal builds the tree: 5 (root) /
+3 2 /
+1 5
+
+
+**Indexing Pattern (for complete binary trees):**
+For node at index i:
+
+Left child: index 2*i + 1
+Right child: index 2*i + 2
+Parent: index (i-1)/2
+
+#### Tree Traversals - The Big Three
+
+**1. Inorder (Left → Root → Right)**
+Process sequence: Left subtree → Current node → Right subtree Useful for: Getting sorted output from BST Example tree: 2 /
+1 3
+
+Inorder: 1 2 3 ← Sorted!
+
+
+**2. Preorder (Root → Left → Right)**
+Process sequence: Current node → Left subtree → Right subtree Useful for: Copying tree, creating tree from array Example tree: 2 /
+1 3
+
+Preorder: 2 1 3 ← Root first!
+
+
+**3. Postorder (Left → Right → Root)**
+Process sequence: Left subtree → Right subtree → Current node Useful for: Deleting tree, calculating heights Example tree: 2 /
+1 3
+
+Postorder: 1 3 2 ← Root last!
+
+
+**Visualization:**
+  A
+ / \
+B   C
+/
+D E
+
+Inorder:   D B E A C  (Left-Root-Right)
+Preorder:  A B D E C  (Root-Left-Right)
+Postorder: D E B C A  (Left-Right-Root)
+
+
+#### Spiral Matrix Traversal
+
+Traverse a 2D matrix in **spiral order** (clockwise from outside to inside):
+Input Matrix:
+1  2  3  5
+8  9  4  65
+7  6  5  11
+87 56 15 110
+
+Spiral Order:
+1 → 2 → 3 → 5 → 65 → 11 → 110 → 15 → 56 → 87 → 7 → 8 → 9 → 4 → 6 → 5
+
+Steps:
+
+Traverse right (top row)
+Traverse down (right column)
+Traverse left (bottom row)
+Traverse up (left column)
+Shrink boundaries and repeat
+
+---
+
+### 💻 Key Code Snippets
+
+#### Node Class Definition
+```java
+public class Node {
+    int data;
+    Node left;
+    Node right;
+    
+    Node(int data) {
+        this.data = data;
+        this.left = null;
+        this.right = null;
+    }
+}
+```
+
+#### Create Tree from Array
+```java
+int i = -1;  // Global index tracker
+
+public Node createTree(int[] nodes) {
+    i++;
+    
+    // BASE CASE: -1 represents null/missing node
+    if (nodes[i] == -1) {
+        return null;
+    }
+    
+    // Create node with current value
+    Node newNode = new Node(nodes[i]);
+    
+    // Recursively create left subtree
+    newNode.left = createTree(nodes);
+    
+    // Recursively create right subtree
+    newNode.right = createTree(nodes);
+    
+    return newNode;
+}
+
+// Example:
+// Array: [5, 3, -1, 8, -1, -1, 2, 1, -1, -1, 5, -1, -1]
+// Creates preorder tree structure
+```
+
+**How it works:**
+Array: [5, 3, -1, 8, -1, -1, 2, 1, -1, -1, 5, -1, -1]
+Index: 0  1   2  3   4   5  6  7   8   9 10  11  12
+
+i=0: nodes[0]=5 → Create node 5
+i=1: nodes[1]=3 → Create left child 3
+i=2: nodes[2]=-1 → left.left = null
+i=3: nodes[3]=8 → Create left.right 8
+i=4: nodes[4]=-1 → null
+i=5: nodes[5]=-1 → null
+i=6: nodes[6]=2 → Create right child 2
+i=7: nodes[7]=1 → Create right.left 1
+i=8: nodes[8]=-1 → null
+i=9: nodes[9]=-1 → null
+i=10: nodes[10]=5 → Create right.right 5
+i=11: nodes[11]=-1 → null
+i=12: nodes[12]=-1 → null
+
+Result Tree: 5 /
+3 2 \ /
+8 1 5
+
+
+#### Inorder Traversal (Left → Root → Right)
+```java
+public void inOrder(Node root) {
+    // BASE CASE
+    if (root == null) {
+        return;
+    }
+    
+    inOrder(root.left);           // Process left subtree
+    System.out.print(root.data + " ");  // Process current node
+    inOrder(root.right);          // Process right subtree
+}
+
+// Time: O(n) - Visit each node once
+// Space: O(h) - Call stack depth = height
+```
+
+**Example:**
+Tree: 2 /
+1 3
+
+Execution:
+inOrder(2)
+→ inOrder(1)
+→ inOrder(null) → return
+→ print 1
+→ inOrder(null) → return
+→ print 2
+→ inOrder(3)
+→ inOrder(null) → return
+→ print 3
+→ inOrder(null) → return
+
+Output: 1 2 3
+
+
+#### Preorder Traversal (Root → Left → Right)
+```java
+public void preOrder(Node root) {
+    // BASE CASE
+    if (root == null) {
+        return;
+    }
+    
+    System.out.print(root.data + " ");  // Process current node
+    preOrder(root.left);          // Process left subtree
+    preOrder(root.right);         // Process right subtree
+}
+
+// Time: O(n) | Space: O(h)
+```
+
+**Example:**
+Tree: 2 /
+1 3
+
+Execution:
+preOrder(2)
+→ print 2 (root first!)
+→ preOrder(1)
+→ print 1
+→ preOrder(null) → return
+→ preOrder(null) → return
+→ preOrder(3)
+→ print 3
+→ preOrder(null) → return
+→ preOrder(null) → return
+
+Output: 2 1 3
+
+
+#### Postorder Traversal (Left → Right → Root)
+```java
+public void postOrder(Node root) {
+    // BASE CASE
+    if (root == null) {
+        return;
+    }
+    
+    postOrder(root.left);         // Process left subtree
+    postOrder(root.right);        // Process right subtree
+    System.out.print(root.data + " ");  // Process current node
+}
+
+// Time: O(n) | Space: O(h)
+```
+
+**Example:**
+Tree: 2 /
+1 3
+
+Execution:
+postOrder(2)
+→ postOrder(1)
+→ postOrder(null) → return
+→ postOrder(null) → return
+→ print 1
+→ postOrder(3)
+→ postOrder(null) → return
+→ postOrder(null) → return
+→ print 3
+→ print 2 (root last!)
+
+Output: 1 3 2
+
+
+#### Spiral Matrix Traversal
+```java
+public static void spiralMatrix(int[][] mat, int left, int right, int top, int bottom) {
+    
+    // BASE CASE: No more rows or columns to process
+    if (top > bottom || left > right) {
+        return;
+    }
+    
+    // STEP 1: Traverse right along top row
+    for (int i = left; i <= right; i++) {
+        System.out.print(mat[top][i] + " ");
+    }
+    
+    // STEP 2: Traverse down along right column
+    for (int i = top + 1; i <= bottom; i++) {
+        System.out.print(mat[i][right] + " ");
+    }
+    
+    // STEP 3: Traverse left along bottom row (if it exists)
+    for (int i = right - 1; i >= left; i--) {
+        System.out.print(mat[bottom][i] + " ");
+    }
+    
+    // STEP 4: Traverse up along left column (if it exists)
+    for (int i = bottom - 1; i > top; i--) {
+        System.out.print(mat[i][left] + " ");
+    }
+    
+    // STEP 5: Recursively process inner matrix
+    spiralMatrix(mat, left + 1, right - 1, top + 1, bottom - 1);
+}
+
+// Example:
+// Matrix:
+// 1  2  3  5
+// 8  9  4  65
+// 7  6  5  11
+// 87 56 15 110
+//
+// Output: 1 2 3 5 65 11 110 15 56 87 7 8 9 4 6 5
+// Time: O(n×m) | Space: O(n×m) recursion stack
+```
+
+**Spiral Visualization:**
+Matrix dimensions: 4×4
+Initial: left=0, right=3, top=0, bottom=3
+
+Round 1:
+→ → → →  (top row, left to right)
+↓
+↓
+↓
+← ← ← ←  (bottom row, right to left)
+↑
+↑
+(left column, bottom to top)
+
+After shrinking: left=1, right=2, top=1, bottom=2
+
+Round 2:
+→ →
+← ←
+...continues until boundaries cross
+
+
+---
+
+### 🔢 Complexity Analysis
+
+| Operation | Time | Space | Notes |
+|-----------|------|-------|-------|
+| **Create Tree from Array** | O(n) | O(n) | Process each element once |
+| **Inorder Traversal** | O(n) | O(h) | Visit each node once |
+| **Preorder Traversal** | O(n) | O(h) | Visit each node once |
+| **Postorder Traversal** | O(n) | O(h) | Visit each node once |
+| **Spiral Matrix** | O(n×m) | O(n×m) | Visit each cell once |
+| **Tree Height** | O(n) | O(h) | Worst: O(n) for skewed tree |
+| **Search in Tree** | O(n) | O(h) | No order guarantee |
+
+**h = height, n = number of nodes, n×m = matrix dimensions**
+
+---
+
+### 🎨 Visual Examples
+
+**Tree Construction from Array:**
+Array: [1, 2, 3, 4, 5, -1, 6]
+
+Building process (preorder):
+Index 0: Create 1 (root)
+Index 1: Create 2 (left of 1)
+Index 2: Create 3 (right of 1)
+Index 3: Create 4 (left of 2)
+Index 4: Create 5 (right of 2)
+Index 5: Skip -1 (null)
+Index 6: Create 6 (right of 3)
+
+Result: 1 /
+2 3 / \
+4 5 6
+
+
+**All Three Traversals Compared:**
+Tree: A /
+B C /
+D E
+
+Inorder:   D B E A C  ← Good for BST sorted output
+Preorder:  A B D E C  ← Root comes first
+Postorder: D E B C A  ← Root comes last
+
+Use each for:
+
+Inorder: Get sorted sequence from BST
+Preorder: Copy tree, serialize for storage
+Postorder: Delete tree bottom-up, calculate heights
+
+**Spiral Matrix Step-by-Step:**
+Original 4×4:
+1  2  3  5
+8  9  4  65
+7  6  5  11
+87 56 15 110
+
+Direction sequence:
+1 → 2 → 3 → 5 ↓
+65
+11
+110 ← 15 ← 56 ← 87
+↑
+7
+8
+9 → 4 → 6 → 5
+
+Result: 1 2 3 5 65 11 110 15 56 87 7 8 9 4 6 5
+
+
+---
+
+### 🧪 Practice Problems
+
+**🟢 Easy**
+1. Build binary tree from array (preorder)
+2. Implement inorder traversal
+3. Implement preorder traversal
+4. Implement postorder traversal
+5. Count total nodes in tree
+
+**🟡 Medium**
+6. Spiral matrix traversal
+7. Find height of binary tree
+8. Find maximum value in tree
+9. Level-order traversal (BFS)
+10. Diameter of binary tree (longest path)
+
+**🔴 Hard**
+11. Serialize and deserialize binary tree
+12. Lowest Common Ancestor (LCA)
+13. Maximum path sum in tree
+14. Construct tree from inorder and preorder
+15. Flatten binary tree to linked list
+
+---
+
+### ⚠️ Common Mistakes
+
+| ❌ Mistake | ✅ Solution | 💭 Why It Matters |
+|-----------|-----------|------------------|
+| Forgetting to handle null nodes | Always check `if (root == null)` first | Null pointer exception otherwise |
+| Confusing traversal orders | Remember: **In**-order (left-root-right), **Pre**-order (root-left-right), **Post**-order (left-right-root) | Wrong order = wrong output |
+| Array index out of bounds in spiral | Check boundaries: `if (top > bottom || left > right)` | ArrayIndexOutOfBounds error |
+| Global index not reset | Declare `i` as class variable, reset before building new tree | Index carries over, builds wrong tree |
+| Forgetting -1 as null marker | Check `if (nodes[i] == -1) return null;` | Will create nodes with -1 data |
+| Wrong recursion order in array builder | Left subtree, then right subtree (preorder) | Tree structure completely wrong |
+| Off-by-one errors in spiral directions | `right - 1` for left traversal, `bottom - 1` for up | Skips or duplicates elements |
+| Not understanding call stack depth | Recursion depth = tree height | Stack overflow on very deep trees |
+
+---
+
+### 🔗 External Resources
+
+- 📺 **VisuAlgo - Binary Tree**: [Tree Traversal Visualization](https://visualgo.net/en/bst)
+- 📖 **GeeksforGeeks**: [Binary Tree Traversals](https://www.geeksforgeeks.org/tree-traversals-inorder-preorder-and-postorder/)
+- 📖 **Binary Trees Explained**: [Complete Guide](https://www.geeksforgeeks.org/binary-tree-data-structure/)
+- 💡 **LeetCode Problems**:
+  - Binary Tree Inorder Traversal (#94)
+  - Binary Tree Preorder Traversal (#144)
+  - Binary Tree Postorder Traversal (#145)
+  - Spiral Matrix (#54)
+  - Level Order Traversal (#102)
+- 🎥 **YouTube**: "Binary Trees & Traversals Explained" - Abdul Bari
+
+---
+
+### 📌 Key Takeaways
+
+💡 **Binary Tree = At most 2 children per node** — Forms hierarchical structure  
+💡 **Three traversals serve different purposes** — Choose based on what you need  
+💡 **Inorder gives sorted output from BST** — Left-Root-Right is the magic order  
+💡 **Array representation with -1 for null** — Compact way to define trees  
+💡 **Spiral traversal = 4 directions + recursion** — Break matrix into layers  
+💡 **Recursion depth = tree height** — Watch for stack overflow on deep trees  
+💡 **Preorder for copying, Postorder for deleting** — Order matters!  
+💡 **Time complexity is always O(n)** — Must visit every node at least once  
+
+---
+
+<!-- End of Day 8: BT -->
+
+
 
 # 🔧 Reference Materials
 
