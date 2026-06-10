@@ -34,8 +34,13 @@ This repository is your complete companion for understanding how data is organiz
 | 🔴 Done | **Day 5** | [Stack Applications & Queues](#day-5-stack-applications--queues) | 🔴 Hard | `Day5Queues.java` |
 | 🔴 Done | **Day 6** | [Two Pointers](#day-6-two-pointers) | 🟡 Medium | `Day6TwoPointers.java` |
 | 🔴 Done | **Day 7** | [Recursion & Backtracking](#day-7-recursion--backtracking) | 🟡 Medium | `Day7Recursion.java` |
-| ⚪ Coming | **Day 8-10** | [Trees & BST](#day-8-10-trees--binary-search-trees) | 🔴 Hard | `Day8Tree.java` |
-| ⚪ Coming | **Day 11-12** | [Graphs](#day-11-12-graphs) | 🔴 Hard | `Day11Graph.java` |
+| 🔴 Done | **Day 8** | [Recursion](#day-8-recursion) | 🔴 Hard | `Day8Recursion.java` |
+
+| 🔴 Done | **Day 8** | [Trees & Binary Trees](#day-8-trees--binary-trees) | 🔴 Hard | `Day8BT.java` |
+| 🔴 Done | **Day 9** | [Binary Search Trees](#day-9-binary-search-trees) | 🔴 Hard | `Day9BST.java` |
+
+| ⚪ Coming | **Day 10** | [Graphs](#day-10-graphs) | 🔴 Hard | `Day10Graph.java` |
+| ⚪ Coming | **Day 11-12** | [DP](#day-11-12-dp) | 🔴 Hard | `Day11Graph.java` |
 
 ---
 
@@ -64,12 +69,12 @@ By the end of this 12-day intensive, you will be able to:
 
 ```
 WEEK 1                          WEEK 2                           
-Day 1: Singly LL       ├──────► Day 7: Recursion         
-Day 2: Doubly/Circ LL  ├──────► Day 8: Binary Tree    
-Day 3: Collections     ├──────► Day 9: Binary Search Tree  
-Day 4: Stacks          ├──────► Day 10: Graphs         
-Day 5: Stack Apps      ├──────► Day 11: Dynamic Programming
-Day 6: Two Pointers    ├──────► Day 12: Dynamic Programming + Heap
+Day 1: Singly LL           ├──────► Day 7: Recursion         
+Day 2: Doubly/Circular LL  ├──────► Day 8: Binary Tree    
+Day 3: Collections         ├──────► Day 9: Binary Search Tree  
+Day 4: Stacks              ├──────► Day 10: Graphs         
+Day 5: Stack Apps          ├──────► Day 11: Dynamic Programming
+Day 6: Two Pointers        ├──────► Day 12: Dynamic Programming + Heap
 ```
 
 ---
@@ -2925,6 +2930,319 @@ Result: 1 2 3 5 65 11 110 15 56 87 7 8 9 4 6 5
 <!-- End of Day 8: BT -->
 
 
+## Day 9: Binary Search Trees
+
+**Status**: 🔴 **COMPLETED** | **Difficulty**: 🔴 **Hard** | **File**: `Day9BST.java`
+
+### 🎯 What You'll Learn
+- Understand **BST Property**: Left < Root < Right
+- Implement **Insert** operation maintaining BST property
+- Implement **Search** operation with O(log n) efficiency
+- Implement **Delete** operation (0 children, 1 child, 2 children cases)
+- Master **In-Order Successor** for deletion
+- Traverse BST using **Level-Order (BFS)** with Queue
+- Compare BST vs Binary Tree performance
+
+
+### 📚 Key Concepts
+
+#### BST Property
+Every node must satisfy:
+All values in LEFT subtree < Node value < All values in RIGHT subtree
+
+**Valid BST:**
+  20
+ /  \
+16    23
+/ 
+10  18
+
+**Invalid (Not BST):**
+  20
+ /  \
+25    15  ❌ 25 > 20 (left child > parent)
+
+#### 4 Main Operations
+
+1. **Insert** - Add node maintaining BST property: O(log n) average, O(n) worst
+2. **Search** - Find node efficiently: O(log n) average, O(n) worst
+3. **Delete** - Remove node with 3 cases: O(log n) average, O(n) worst
+4. **Traversal** - Visit all nodes: O(n)
+
+#### Delete Operation - 3 Cases
+
+**Case 1: No Children (Leaf Node)**
+Delete 10 from:    20              20
+/  \    →       /  
+16    23        16    23
+/  \            /
+10  18          18
+Simply return null (remove node)
+
+**Case 2: One Child**
+Delete 16 from:    20              20
+/  \    →       /  
+16    23        18    23
+
+18
+Return the child (skip the node)
+
+**Case 3: Two Children (Hardest)**
+Delete 16 from:    20                20
+/  \      →       /  
+16    23        18    23
+/  \           /  
+10  18         10   19
+Step 1: Find In-Order Successor (IOS) of 16
+IOS = smallest node in RIGHT subtree = 18
+Step 2: Replace 16's data with 18's data
+Step 3: Delete the IOS node (which has 0 or 1 child)
+
+#### In-Order Successor
+The **smallest node in the right subtree** of a node is its In-Order Successor.
+
+```java
+public Node inOrderSuccessor(Node root) {
+    while (root.left != null) {
+        root = root.left;  // Keep going left to find smallest
+    }
+    return root;
+}
+```
+
+### 💻 Key Code Snippets
+
+#### Insert Operation
+```java
+public Node insert(int data, Node root) {
+    if (root == null) {
+        return new Node(data);  // Found position, create new node
+    }
+    
+    if (data < root.data) {
+        root.left = insert(data, root.left);     // Go left
+    } else {
+        root.right = insert(data, root.right);   // Go right
+    }
+    
+    return root;
+}
+// Time: O(log n) average, O(n) worst (skewed tree)
+// Space: O(h) recursion stack
+```
+
+#### Search Operation
+```java
+public boolean searchKey(Node root, int target) {
+    if (root == null) {
+        return false;  // Not found
+    }
+    
+    if (target < root.data) {
+        return searchKey(root.left, target);      // Search left
+    } else if (target > root.data) {
+        return searchKey(root.right, target);     // Search right
+    } else {
+        return true;  // Found!
+    }
+}
+// Time: O(log n) average, O(n) worst
+// Space: O(h) recursion stack
+```
+
+#### Delete Operation (Complete)
+```java
+public Node deleteNode(Node root, int val) {
+    
+    // Find the node to delete
+    if (val > root.data) {
+        root.right = deleteNode(root.right, val);  // Go right
+    } else if (val < root.data) {
+        root.left = deleteNode(root.left, val);    // Go left
+    } else { 
+        // Found node to delete
+        
+        // Case 1: No children (leaf node)
+        if (root.left == null && root.right == null) {
+            return null;
+        }
+        
+        // Case 2: One child (left only)
+        if (root.left == null) {
+            return root.right;
+        } 
+        
+        // Case 2: One child (right only)
+        if (root.right == null) {
+            return root.left;
+        }
+        
+        // Case 3: Two children
+        Node IOS = inOrderSuccessor(root.right);    // Find IOS
+        root.data = IOS.data;                        // Replace data
+        root.right = deleteNode(root.right, IOS.data); // Delete IOS
+    }
+    return root;
+}
+// Time: O(log n) average, O(n) worst
+// Space: O(h) recursion stack
+```
+
+#### Level-Order Traversal (BFS)
+```java
+public void levelOrderBfs(Node root) {
+    Queue<Node> q = new LinkedList<>();
+    q.offer(root);
+    
+    while (!q.isEmpty()) {
+        int qSize = q.size();
+        
+        for (int i = 0; i < qSize; i++) {
+            Node current = q.poll();
+            System.out.print(current.data + " ");
+            
+            if (current.left != null) {
+                q.offer(current.left);
+            }
+            if (current.right != null) {
+                q.offer(current.right);
+            }
+        }
+        System.out.println();  // New line for each level
+    }
+}
+// Time: O(n) | Space: O(w) where w = max width
+```
+
+### 🔢 Complexity Comparison
+
+| Operation | Average | Worst (Skewed) | Notes |
+|-----------|---------|----------------|-------|
+| **Insert** | O(log n) | O(n) | Balanced vs linear chain |
+| **Search** | O(log n) | O(n) | Binary elimination |
+| **Delete** | O(log n) | O(n) | Find node + handle 3 cases |
+| **Traversal** | O(n) | O(n) | Must visit all nodes |
+| **Space** | O(log n) | O(n) | Recursion stack depth |
+
+**Why worst case is O(n)?**
+If tree becomes skewed (all right children, like a linked list), every operation scans all n nodes!
+
+### 🎨 Visual Examples
+
+**Insert Sequence:**
+Insert 20 → 16 → 23 → 10 → 18
+Step 1: Insert 20
+20
+Step 2: Insert 16 (16 < 20, go left)
+20
+/
+16
+Step 3: Insert 23 (23 > 20, go right)
+20
+/  
+16    23
+Step 4: Insert 10 (10 < 20, go left; 10 < 16, go left)
+20
+/  
+16    23
+/
+10
+Step 5: Insert 18 (18 < 20, go left; 18 > 16, go right)
+20
+/  
+16    23
+/  
+10   18
+
+**Search Trace:**
+Search for 18 in:    20
+/  
+16    23
+/  
+10   18
+Start at 20:
+18 < 20? YES → Go LEFT to 16
+18 < 16? NO
+18 > 16? YES → Go RIGHT to 18
+18 == 18? YES → Found! Return true
+
+**Delete with 2 Children:**
+Delete 16:           20              20
+/  \            /  
+16    23   →    18    23
+/  \           /  
+10   18        10   19
+
+19
+Step 1: Find IOS of 16 (smallest in right subtree)
+Start at 18, go left → 18 is smallest
+IOS = 18
+Step 2: Replace 16 with 18
+Now tree has 18 instead of 16
+Step 3: Delete node 18 from right subtree
+18 has right child 19, so recursively delete 18
+Return 19 as new right child
+
+### 🧪 Practice Problems
+
+**🟢 Easy**
+1. Insert elements into BST
+2. Search for an element in BST
+3. In-order traversal of BST (should be sorted)
+4. Find minimum and maximum elements
+
+**🟡 Medium**
+5. Delete node with no children
+6. Delete node with one child
+7. Delete node with two children
+8. Find kth smallest element in BST
+9. Validate if tree is a valid BST
+10. Level-order traversal with levels
+
+**🔴 Hard**
+11. Lowest Common Ancestor (LCA) of two nodes
+12. BST Iterator (in-order sequence)
+13. Recover BST (two nodes swapped, restore it)
+14. Count BSTs (how many structurally different BSTs?)
+15. Merge two BSTs
+
+### ⚠️ Common Mistakes
+
+| ❌ Mistake | ✅ Solution | 💭 Why It Matters |
+|-----------|-----------|------------------|
+| Inserting without recursion assignment | Do `root.left = insert(...)` not just `insert(...)` | Node never actually connects to tree |
+| Wrong IOS selection for delete | Always pick smallest in RIGHT subtree, not left | Picks wrong successor, breaks order |
+| Not handling all 3 delete cases | Always check: 0 children, 1 child, 2 children | Incomplete deletion causes crashes |
+| Skewed tree (all right or left) | Can't fix in deletion, but be aware O(n) possible | Performance degrades to linked list |
+| Returning root after modifications | Always return root/modified node | Loss of reference, tree disconnects |
+| Queue empty error in BFS | Always check `!q.isEmpty()` before `q.poll()` | NoSuchElementException |
+| Forgetting to reset recursion variable | Each call should be independent | State carries over incorrectly |
+
+### 🔗 External Resources
+
+- 📺 **VisuAlgo - BST**: [Interactive BST Visualization](https://visualgo.net/en/bst)
+- 📖 **GeeksforGeeks - BST**: [Complete BST Guide](https://www.geeksforgeeks.org/binary-search-tree-data-structure/)
+- 💡 **LeetCode Problems**:
+  - Validate BST (#98)
+  - Delete Node in BST (#450)
+  - Lowest Common Ancestor (#235)
+  - Kth Smallest Element (#230)
+  - Recover BST (#99)
+- 🎥 **YouTube**: "BST Operations Explained" - Abdul Bari
+
+### 📌 Key Takeaways
+
+💡 **BST Property must be maintained** — Left < Root < Right at ALL levels  
+💡 **Search is O(log n) because you eliminate half** — Binary elimination power!  
+💡 **Delete has 3 cases** — Leaf, 1 child, 2 children; each handled differently  
+💡 **In-Order Successor is smallest in right subtree** — Key to 2-child deletion  
+💡 **Skewed tree = O(n) performance** — Know the worst case!  
+💡 **BFS uses Queue** — Level-by-level traversal  
+💡 **Self-balancing BSTs (AVL, RB-trees)** — Prevent skewing (advanced topic)  
+
+---
+
+<!-- End of Day 9: BST -->
 
 # 🔧 Reference Materials
 

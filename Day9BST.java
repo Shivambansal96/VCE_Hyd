@@ -96,9 +96,13 @@ public class Day9BST {
 
         if (val > root.data) {
             root.right = deleteNode(root.right, val);  // 6   
-        } else if (val < root.data) {
+        }
+        
+        else if (val < root.data) {
             root.left = deleteNode(root.left, val);
-        } else { // root.data == val
+        } 
+        
+        else { // root.data == val
 
             // 0 child
             if (root.left == null && root.right == null) {
