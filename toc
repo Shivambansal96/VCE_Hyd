@@ -6,7 +6,7 @@
 // Two Pointer || Sliding window
 
 // Recursion and BackTracking
-// Binary Trees
+// BackTracking and Binary Trees
 // Binary Search Trees
 // Graphs
 // DP and Heap
