@@ -149,7 +149,6 @@ public class Day11Graphs {
         // newIdx++;
         // graph.addEdges(arr, 8, 6, newIdx);
 
-        
         int noOfEdges = 10;
         for (int i = 0; i < noOfEdges / 2; i++) {
             System.out.print("Enter Src: ");
@@ -160,6 +159,9 @@ public class Day11Graphs {
         }
 
         graph.printGraph(arr); // Dynamic
+
+
+        
 
     }
 }
