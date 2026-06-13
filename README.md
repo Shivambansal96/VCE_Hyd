@@ -35,7 +35,6 @@ This repository is your complete companion for understanding how data is organiz
 | 🔴 Done | **Day 6** | [Two Pointers](#day-6-two-pointers) | 🟡 Medium | `Day6TwoPointers.java` |
 | 🔴 Done | **Day 7** | [Recursion & Backtracking](#day-7-recursion--backtracking) | 🟡 Medium | `Day7Recursion.java` |
 | 🔴 Done | **Day 8** | [Recursion](#day-8-recursion) | 🔴 Hard | `Day8Recursion.java` |
-
 | 🔴 Done | **Day 8** | [Trees & Binary Trees](#day-8-trees--binary-trees) | 🔴 Hard | `Day8BT.java` |
 | 🔴 Done | **Day 9** | [Binary Search Trees](#day-9-binary-search-trees) | 🔴 Hard | `Day9BST.java` |
 

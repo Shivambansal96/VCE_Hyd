@@ -110,10 +110,10 @@ public class Day11Graphs {
     }
 
     public void printGraph(ArrayList<Edge>[] arr) {
-        for (int idx = 0; idx < arr.length; idx++) {
-            System.out.print(arr[idx].get(0).src + " -> Neighbors: ");
-            for (int i = 0; i < arr[idx].size(); i++) {
-                Edge e = arr[idx].get(i);
+        for (ArrayList<Edge> arr1 : arr) {
+            System.out.print(arr1.get(0).src + " -> Neighbors: ");
+            for (int i = 0; i < arr1.size(); i++) {
+                Edge e = arr1.get(i);
                 System.out.print("(" + e.src + "," + e.dest + ") ");
             }
             System.out.println();
@@ -148,7 +148,6 @@ public class Day11Graphs {
         // graph.addEdges(arr, 6, 8, newIdx);
         // newIdx++;
         // graph.addEdges(arr, 8, 6, newIdx);
-
         int noOfEdges = 10;
         for (int i = 0; i < noOfEdges / 2; i++) {
             System.out.print("Enter Src: ");
@@ -160,8 +159,7 @@ public class Day11Graphs {
 
         graph.printGraph(arr); // Dynamic
 
-
-        
+        sc.close();
 
     }
 }
