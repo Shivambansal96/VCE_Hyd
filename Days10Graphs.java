@@ -1,7 +1,7 @@
 
 // // ============== Spiral Export of Service Health Grid ==============
 // import java.util.Scanner;
-// public class Day10Graphs {
+// public class Days10Graphs {
 //     public static void main(String[] args) {
 //         Scanner sc = new Scanner(System.in);
 //         System.out.print("Enter number of rows and columns: ");
@@ -47,7 +47,7 @@
 // import java.util.ArrayDeque;
 // import java.util.Deque;
 // import java.util.Scanner;
-// public class Day10Graphs {
+// public class Days10Graphs {
 //     public static void main(String[] args) {
 //         Scanner sc = new Scanner(System.in);
 //         System.out.print("Enter N (number of sectors) and K (maximum allowed fluctuation): ");
@@ -94,7 +94,7 @@
 // import java.util.Arrays;
 // import java.util.Scanner;
 
-// public class Day10Graphs {
+// public class Days10Graphs {
 
 //     public static void main(String[] args) {
 //         Scanner sc = new Scanner(System.in);
@@ -132,7 +132,7 @@
 // // ============== (END) Evacuation Boat Dispatch for Rescue Operations ==============
 
 // import java.util.ArrayList;
-// public class Day10Graphs {
+// public class Days10Graphs {
 //     public class Edge {
 //         int src;
 //         int dest;
@@ -145,12 +145,12 @@
 //         for (int i = 0; i < arr.length; i++) {
 //             arr[i] = new ArrayList<>();
 //         }
-//         for (ArrayList<Day10Graphs.Edge> element : arr) {
+//         for (ArrayList<Days10Graphs.Edge> element : arr) {
 //             System.out.println(element);
 //         }
 //     }
 //     public static void main(String[] args) {
-//         Day10Graphs graphs = new Day10Graphs();
+//         Days10Graphs graphs = new Days10Graphs();
 //         int vertices = 3;
 //         @SuppressWarnings("unchecked")
 //         // This is an array -> 

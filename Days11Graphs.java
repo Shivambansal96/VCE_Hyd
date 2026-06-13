@@ -1,6 +1,6 @@
 
 // import java.util.ArrayList;
-// public class Day11Graphs {
+// public class Days11Graphs {
 //     public class Edge {
 //         int src;
 //         int dest;
@@ -28,7 +28,7 @@
 //         arr[4].add(new Edge(4, 3));
 //     }
 //     public static void main(String[] args) {
-//         Day11Graphs graph = new Day11Graphs();
+//         Days11Graphs graph = new Days11Graphs();
 //         int Vertices = 5;
 //         @SuppressWarnings("unchecked")
 //         // int[] arr = new int[size];
@@ -49,7 +49,7 @@
 import java.util.ArrayList;
 import java.util.Scanner;
 
-public class Day11Graphs {
+public class Days11Graphs {
 
     static ArrayList<Integer> arrList = new ArrayList<>();
 
@@ -109,6 +109,51 @@ public class Day11Graphs {
 
     }
 
+    public void bfs(ArrayList<Edge>[] arr) {
+
+        boolean[] visited = new boolean[arr.length];
+        java.util.Queue<Integer> q = new java.util.LinkedList<>();
+
+        q.add(0); // Start from first vertex
+        visited[0] = true;
+
+        System.out.print("BFS: ");
+
+        while (!q.isEmpty()) {
+
+            int curr = q.remove();
+
+            System.out.print(arrList.get(curr) + " ");
+
+            for (Edge e : arr[curr]) {
+
+                int neighborIndex = arrList.indexOf(e.dest);
+
+                if (!visited[neighborIndex]) {
+                    visited[neighborIndex] = true;
+                    q.add(neighborIndex);
+                }
+            }
+        }
+
+        System.out.println();
+    }
+
+    public void dfs(ArrayList<Edge>[] arr, int curr, boolean[] visited) {
+
+        visited[curr] = true;
+        System.out.print(arrList.get(curr) + " ");
+
+        for (Edge e : arr[curr]) {
+
+            int neighborIndex = arrList.indexOf(e.dest);
+
+            if (!visited[neighborIndex]) {
+                dfs(arr, neighborIndex, visited);
+            }
+        }
+    }
+
     public void printGraph(ArrayList<Edge>[] arr) {
         for (ArrayList<Edge> arr1 : arr) {
             System.out.print(arr1.get(0).src + " -> Neighbors: ");
@@ -122,7 +167,7 @@ public class Day11Graphs {
 
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
-        Day11Graphs graph = new Day11Graphs();
+        Days11Graphs graph = new Days11Graphs();
 
         int Vertices = 4;
 
@@ -160,6 +205,13 @@ public class Day11Graphs {
         graph.printGraph(arr); // Dynamic
 
         sc.close();
+
+        graph.bfs(arr);
+
+        boolean[] visited = new boolean[arr.length];
+        System.out.println();
+        System.out.print("DFS: ");
+        graph.dfs(arr, 0, visited); // Start from first vertex
 
     }
 }
