@@ -34,8 +34,8 @@ This repository is your complete companion for understanding how data is organiz
 | 🔴 Done | **Day 5** | [Stack Applications & Queues](#day-5-stack-applications--queues) | 🔴 Hard | `Day5Queues.java` |
 | 🔴 Done | **Day 6** | [Two Pointers](#day-6-two-pointers) | 🟡 Medium | `Day6TwoPointers.java` |
 | 🔴 Done | **Day 7** | [Recursion & Backtracking](#day-7-recursion--backtracking) | 🟡 Medium | `Day7Recursion.java` |
-| 🔴 Done | **Day 8** | [Recursion](#day-8-recursion) | 🔴 Hard | `Day8Recursion.java` |
-| 🔴 Done | **Day 8** | [Trees & Binary Trees](#day-8-trees--binary-trees) | 🔴 Hard | `Day8BT.java` |
+| 🔴 Done | **Day 8A** | [Recursion](#day-8-recursion) | 🔴 Hard | `Day8Recursion.java` |
+| 🔴 Done | **Day 8B** | [Trees & Binary Trees](#day-8-trees--binary-trees) | 🔴 Hard | `Day8BT.java` |
 | 🔴 Done | **Day 9** | [Binary Search Trees](#day-9-binary-search-trees) | 🔴 Hard | `Day9BST.java` |
 
 | ⚪ Coming | **Day 10** | [Graphs](#day-10-graphs) | 🔴 Hard | `Day10Graph.java` |
