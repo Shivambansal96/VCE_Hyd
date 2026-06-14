@@ -38,8 +38,9 @@ This repository is your complete companion for understanding how data is organiz
 | 🔴 Done | **Day 8B** | [Trees & Binary Trees](#day-8-trees--binary-trees) | 🔴 Hard | `Day8BT.java` |
 | 🔴 Done | **Day 9** | [Binary Search Trees](#day-9-binary-search-trees) | 🔴 Hard | `Day9BST.java` |
 
-| ⚪ Coming | **Day 10** | [Graphs](#day-10-graphs) | 🔴 Hard | `Day10Graph.java` |
-| ⚪ Coming | **Day 11-12** | [DP](#day-11-12-dp) | 🔴 Hard | `Day11Graph.java` |
+| 🔴 Done | **Day 10** | [Graphs](#day-10-graphs) | 🟡 Medium | `Day10Graphs.java` |
+| 🔴 Done | **Day 11** | [Graphs Traversal](#day-11-graphs-traversal) | 🔴 Hard | `Day11Graphs.java` |
+| 🔴 Done | **Day 12** | [Dynamic Programming](#day-12-dynamic-programming) | 🔴 Hard | `Day12DP.java` |
 
 ---
 
@@ -71,9 +72,9 @@ WEEK 1                          WEEK 2
 Day 1: Singly LL           ├──────► Day 7: Recursion         
 Day 2: Doubly/Circular LL  ├──────► Day 8: Binary Tree    
 Day 3: Collections         ├──────► Day 9: Binary Search Tree  
-Day 4: Stacks              ├──────► Day 10: Graphs         
-Day 5: Stack Apps          ├──────► Day 11: Dynamic Programming
-Day 6: Two Pointers        ├──────► Day 12: Dynamic Programming + Heap
+Day 4: Stacks              ├──────► Day 10: Graphs & Sliding Window
+Day 5: Stack Apps          ├──────► Day 11: Graphs Traversal
+Day 6: Two Pointers        ├──────► Day 12: Dynamic Programming
 ```
 
 ---
@@ -3242,6 +3243,1981 @@ Return 19 as new right child
 ---
 
 <!-- End of Day 9: BST -->
+
+## Day 10: Graphs
+
+**Status**: 🔴 **COMPLETED** | **Difficulty**: 🟡 **Medium** | **File**: `Day10Graphs.java`
+
+### 🎯 What You'll Learn
+- Master **Sliding Window with Deques** for min/max tracking
+- Apply **Two Pointer Technique** to greedy optimization problems
+- Implement **Graph representation** using Adjacency Lists
+- Understand graph problems using array techniques (not just traditional graph algorithms)
+- Solve **interval constraint problems** efficiently
+- Build intuition for **greedy algorithms** and when they work
+
+### 📚 Concepts Explained
+
+#### Problem 1: Adaptive Cooling Corridor Analyzer
+
+**Problem Statement:**
+Find the longest continuous corridor segment where:
+maxLoadInSegment - minLoadInSegment ≤ K
+
+**Key Insight:** Use **Sliding Window with Deques** to track min/max in O(1) time!
+
+**Two Deque Approach:**
+- `maxDeque`: Maintains indices of potential maximum values (decreasing order)
+- `minDeque`: Maintains indices of potential minimum values (increasing order)
+- Efficiently track both min and max as window slides
+
+**Algorithm:**
+
+For each right pointer:
+
+Remove elements from deques that are smaller/larger than current
+Add current element index to both deques
+While (max - min > K): shrink window from left
+Update max length
+
+
+
+
+**Why Deques?**
+- Regular Queue: Can't remove from back → O(n) per operation
+- Deque: Can remove from both ends → O(1) amortized
+- Maintains elements in useful order (decreasing for max, increasing for min)
+
+#### Problem 2: Evacuation Boat Dispatch for Rescue Operations
+
+**Problem Statement:**
+Each boat can carry **at most 2 people**. Every person must fit on a boat (weight ≤ limit).
+Find **minimum number of boats** needed.
+
+**Key Insight:** **Greedy Two Pointer** approach works!
+
+**Algorithm:**
+
+Sort people by weight: [2, 3, 7, 8, 9, 11]
+Use left (lightest) and right (heaviest) pointers
+Try to pair: heaviest + lightest person
+If they fit together (weight ≤ limit): both board 1 boat
+If not: heaviest person boards alone
+Move pointers accordingly, count boats
+
+
+**Why Greedy Works Here:**
+- If heaviest person can't fit with lightest, they can't fit with anyone
+- So always try pairing heaviest with lightest
+- This minimizes "wasted" boat capacity
+
+**Example Trace:**
+Input: people = [2, 3, 7, 8, 9, 11], limit = 11
+
+After sort: [2, 3, 7, 8, 9, 11]
+Step 1: left=2, right=11
+
+2 + 11 = 13 > 11 → 11 goes alone (boat 1)
+
+Boats = 1, left=2, right=9
+Step 2: left=2, right=9
+
+2 + 9 = 11 ≤ 11 → Both board together (boat 2)
+
+Boats = 2, left=3, right=8
+Step 3: left=3, right=8
+
+3 + 8 = 11 ≤ 11 → Both board together (boat 3)
+
+Boats = 3, left=7, right=7
+Step 4: left=7, right=7
+
+Same person, boards alone (boat 4)
+
+Boats = 4
+Answer: 4 boats
+
+#### Graph Representation
+
+Graphs can be represented in multiple ways:
+
+**1. Adjacency List (Most Common)**
+```java
+ArrayList<Edge>[] graph = new ArrayList[vertices];
+```
+- Space: O(V + E) — efficient!
+- Insert/Delete: O(1)
+- Search: O(degree)
+- Use when: Graph is sparse (fewer edges)
+
+**2. Adjacency Matrix**
+```java
+int[][] adj = new int[V][V];
+```
+- Space: O(V²) — wasteful for sparse graphs!
+- Insert/Delete: O(1)
+- Search: O(1)
+- Use when: Graph is dense (many edges)
+
+**3. Edge List**
+```java
+List<Edge> edges = new ArrayList<>();
+```
+- Space: O(E)
+- Use when: Need to iterate edges frequently
+
+---
+
+### 💻 Key Code Snippets
+
+#### Deque-Based Sliding Window (Adaptive Cooling)
+```java
+public static int adaptiveCoolingCorridor(int N, long K, long[] loads) {
+    // Time: O(n) | Space: O(n)
+    
+    Deque<Integer> maxDeque = new ArrayDeque<>();  // Decreasing order
+    Deque<Integer> minDeque = new ArrayDeque<>();  // Increasing order
+    
+    int left = 0;
+    int maxLength = 0;
+    
+    for (int right = 0; right < N; right++) {
+        
+        // Remove elements smaller than current from maxDeque
+        // (they'll never be the max once current exists)
+        while (!maxDeque.isEmpty() && 
+               loads[maxDeque.peekLast()] <= loads[right]) {
+            maxDeque.pollLast();
+        }
+        maxDeque.offerLast(right);  // Add current
+        
+        // Remove elements larger than current from minDeque
+        // (they'll never be the min once current exists)
+        while (!minDeque.isEmpty() && 
+               loads[minDeque.peekLast()] >= loads[right]) {
+            minDeque.pollLast();
+        }
+        minDeque.offerLast(right);  // Add current
+        
+        // Shrink window while fluctuation > K
+        while (loads[maxDeque.peekFirst()] - 
+               loads[minDeque.peekFirst()] > K) {
+            
+            // Remove old indices from deques
+            if (maxDeque.peekFirst() == left) {
+                maxDeque.pollFirst();
+            }
+            if (minDeque.peekFirst() == left) {
+                minDeque.pollFirst();
+            }
+            left++;
+        }
+        
+        // Update max valid length
+        maxLength = Math.max(maxLength, right - left + 1);
+    }
+    
+    return maxLength;
+}
+
+// Example:
+// loads = [10, 12, 15, 11, 14, 18, 19, 13], K = 4
+// Valid segments: [10,12,15,11] (15-10=5 > 4, but [10,12,11] works, length=3)
+//                 [12,15,11,14] (15-12=3 ≤ 4, length=4) ✓
+// Answer: 4
+```
+
+**Why Deques Work:**
+Loads: [10, 12, 15, 11, 14, 18, 19, 13], K = 4
+Window [10, 12, 15, 11]:
+
+maxDeque (indices): [2] (value 15 is max)
+
+minDeque (indices): [0] (value 10 is min)
+
+Fluctuation: 15 - 10 = 5 > 4 → Shrink
+Window [12, 15, 11]:
+
+maxDeque: [2] (value 15)
+
+minDeque: [1] (value 12)
+
+Fluctuation: 15 - 12 = 3 ≤ 4 ✓
+Window [12, 15, 11, 14]:
+
+maxDeque: [2] (value 15)
+
+minDeque: [1] (value 12)
+
+Fluctuation: 15 - 12 = 3 ≤ 4 ✓ Length = 4
+This is the maximum!
+
+#### Two Pointer Greedy (Boat Dispatch)
+```java
+public static int evacuation(int n, int limit, int[] people) {
+    // Time: O(n log n) — sorting dominates | Space: O(1)
+    
+    Arrays.sort(people);  // Sort by weight
+    
+    int left = 0;
+    int right = n - 1;
+    int boats = 0;
+    
+    while (left <= right) {
+        // Try pairing: heaviest + lightest
+        if (people[left] + people[right] <= limit) {
+            left++;  // Lightest person boards with heaviest
+        }
+        // Heaviest person always boards (alone if needed)
+        right--;
+        boats++;
+    }
+    
+    return boats;
+}
+
+// Example:
+// people = [2, 3, 7, 8, 9, 11], limit = 11
+// After sort: [2, 3, 7, 8, 9, 11]
+//
+// left=0 (2), right=5 (11): 2+11=13 > 11 → 11 alone (boats=1)
+// left=0 (2), right=4 (9): 2+9=11 ≤ 11 → Both board (boats=2)
+// left=1 (3), right=3 (8): 3+8=11 ≤ 11 → Both board (boats=3)
+// left=2 (7), right=2 (7): left==right → 7 alone (boats=4)
+//
+// Answer: 4
+```
+
+#### Graph Adjacency List Creation
+```java
+public class Edge {
+    int src;
+    int dest;
+    
+    Edge(int src, int dest) {
+        this.src = src;
+        this.dest = dest;
+    }
+}
+
+public void createGraph(ArrayList<Edge>[] graph, int vertices) {
+    // Initialize each vertex's adjacency list
+    for (int i = 0; i < graph.length; i++) {
+        graph[i] = new ArrayList<>();
+    }
+    
+    // Add edges
+    // Example: graph from 0→1, 0→2, 1→2, 2→3
+    graph[0].add(new Edge(0, 1));
+    graph[0].add(new Edge(0, 2));
+    graph[1].add(new Edge(1, 2));
+    graph[2].add(new Edge(2, 3));
+}
+
+// Adjacency List Representation:
+// Vertex 0 → [Edge(0→1), Edge(0→2)]
+// Vertex 1 → [Edge(1→2)]
+// Vertex 2 → [Edge(2→3)]
+// Vertex 3 → []
+```
+
+---
+
+### 🔢 Complexity Analysis
+
+| Problem | Time | Space | Key Technique |
+|---------|------|-------|----------------|
+| **Adaptive Cooling** | O(n) | O(n) | Deque sliding window |
+| **Boat Dispatch** | O(n log n) | O(1) | Greedy two-pointer |
+| **Graph Creation** | O(V+E) | O(V+E) | Adjacency list |
+| **Graph Search (DFS/BFS)** | O(V+E) | O(V) | Will cover next |
+
+**Why Deque is O(n)?**
+- Each element is added once: O(n)
+- Each element is removed at most once: O(n)
+- Total: O(n) amortized
+
+**Why Greedy is O(n log n)?**
+- Sorting: O(n log n) — dominates
+- Two pointer scan: O(n)
+- Total: O(n log n)
+
+---
+
+### 🎨 Visual Examples
+
+**Deque State During Cooling Corridor:**
+Loads: [10, 12, 15, 11, 14, 18, 19, 13], K = 4
+Window grows with right pointer:
+
+[10] maxDeque=[0] minDeque=[0] | range=0
+
+[10,12] maxDeque=[1] minDeque=[0] | range=2
+
+[10,12,15] maxDeque=[2] minDeque=[0] | range=5 > 4 → SHRINK
+
+[12,15] maxDeque=[2] minDeque=[1] | range=3 ≤ 4 ✓
+
+[12,15,11] maxDeque=[2] minDeque=[3] | range=4 ≤ 4 ✓
+
+[12,15,11,14] maxDeque=[2] minDeque=[3] | range=3 ≤ 4 ✓ MAX_LENGTH=4
+
+[15,11,14,18] maxDeque=[5] minDeque=[3] | range=7 > 4 → SHRINK
+
+...
+
+Answer: 4
+
+**Boat Pairing Strategy:**
+people = [2, 3, 7, 8, 9, 11], limit = 11
+Greedy Strategy Visualization:
+
+Lightest  ↓               ↑  Heaviest
+
+[2, 3, 7, 8, 9, 11]
+
+←─────────────────→ Try pair: 2+11=13 > 11 ✗
+
+11 goes alone
+
+[2, 3, 7, 8, 9]
+
+←───────────────→ Try pair: 2+9=11 ≤ 11 ✓
+
+Both board together
+
+[3, 7, 8]
+
+←─────────→ Try pair: 3+8=11 ≤ 11 ✓
+
+Both board together
+
+[7]
+
+←→ Only 7 left: boards alone
+Boats used: 4 (1 alone + 1 pair + 1 pair + 1 alone)
+
+**Graph Adjacency List Visualization:**
+Edges: 0→1, 0→2, 1→2, 2→3
+ArrayList<Edge>[] graph = new ArrayList[4]:
+graph[0] → [Edge(0,1), Edge(0,2)]
+
+↓ dest=1, dest=2
+graph[1] → [Edge(1,2)]
+
+↓ dest=2
+graph[2] → [Edge(2,3)]
+
+↓ dest=3
+graph[3] → []
+
+(no outgoing edges)
+Visual Graph:
+
+0
+
+/ 
+
+1   2
+
+\ /
+
+3
+
+---
+
+### 🧪 Practice Problems
+
+**🟢 Easy**
+1. Longest substring without repeating characters (sliding window)
+2. Fruit into baskets (sliding window variant)
+3. Graph: Create adjacency list from edges
+4. Graph: Count connected components
+
+**🟡 Medium**
+5. Longest subarray with absolute difference ≤ K (deques)
+6. Sliding window maximum (classic deque problem)
+7. Two sum (sorted array) — greedy variant
+8. Graph: DFS traversal from source
+9. Graph: BFS level-order traversal
+10. Islands (2D grid) — DFS/BFS application
+
+**🔴 Hard**
+11. Shortest bridge between two islands
+12. Minimum window substring
+13. Graph: Shortest path (Dijkstra/BFS)
+14. Graph: Topological sort (Kahn's algorithm)
+15. Maximum profit with K transactions (greedy + DP)
+
+---
+
+### ⚠️ Common Mistakes
+
+| ❌ Mistake | ✅ Solution | 💭 Why It Matters |
+|-----------|-----------|------------------|
+| Using Queue instead of Deque | Use `ArrayDeque` for both ends access | Queue can't efficiently remove from back |
+| Not sorting before two-pointer | Always sort first for greedy problems | Otherwise pairing strategy breaks |
+| Removing wrong index from deque | Check `peekFirst() == left` before pollFirst | Wrong indices remain, max/min incorrect |
+| Forgetting to update deques after shrink | Remove stale indices from BOTH deques | Old values persist, corrupting min/max |
+| Graph list not initialized | Do `graph[i] = new ArrayList<>()` | NullPointerException when adding edges |
+| Adding edge both directions for undirected | For undirected: add both `(u→v)` and `(v→u)` | Missing reverse edge = incomplete graph |
+| Confusing when to shrink window | Shrink while condition violated, expand otherwise | Wrong window size = wrong answer |
+| Not resetting deques between test cases | Clear deques or declare new ones | Previous test data contaminates next |
+
+---
+
+### 🔗 External Resources
+
+- 📺 **VisuAlgo - Sliding Window**: [Deque & Window Visualization](https://visualgo.net/)
+- 📖 **GeeksforGeeks - Deques**: [Deque Tutorial](https://www.geeksforgeeks.org/deque-set-1-introduction-applications/)
+- 📖 **Graphs Intro**: [Adjacency List & Matrix](https://www.geeksforgeeks.org/graph-data-structure-and-algorithms/)
+- 💡 **LeetCode Problems**:
+  - Sliding Window Maximum (#239)
+  - Longest Substring with Limit (#1438)
+  - Boats to Save People (#881)
+  - Number of Islands (#200)
+  - Clone Graph (#133)
+- 🎥 **YouTube**: "Sliding Windows & Graphs Explained" - Code Help
+
+---
+
+### 📌 Key Takeaways
+
+💡 **Deques = Dual-ended queues** — Remove from front AND back in O(1)  
+💡 **Sliding window + deque = O(n)** — Can track min/max efficiently  
+💡 **Greedy works when local optimum = global optimum** — Verify before using!  
+💡 **Sort first for two-pointer greedy** — Ordering matters for correctness  
+💡 **Adjacency list for sparse graphs** — More memory-efficient than matrix  
+💡 **Graph problems often disguise themselves** — "Corridor" and "Boats" are graph-thinking problems!  
+💡 **Tomorrow: Graph algorithms** — DFS, BFS, shortest paths, and more!  
+
+---
+
+<!-- End of Day 10: Graphs -->
+
+## Day 11: Graphs Traversal
+
+**Status**: 🔴 **COMPLETED** | **Difficulty**: 🔴 **Hard** | **File**: `Day11Graphs.java`
+
+### 🎯 What You'll Learn
+- Understand **Graph Data Structure** and representations
+- Master **Adjacency List** implementation (sparse graphs)
+- Implement **BFS (Breadth-First Search)** — Iterative with Queue
+- Implement **DFS (Depth-First Search)** — Both Recursive and Iterative
+- Traverse graphs **level-by-level** (BFS) vs **depth-first** (DFS)
+- Build **Directed and Undirected** graphs dynamically
+- Solve graph problems: path finding, connectivity, component detection
+- Compare BFS vs DFS: when to use which?
+
+### 📚 Concepts Explained
+
+#### What is a Graph?
+
+A **Graph** is a non-linear data structure consisting of **vertices (nodes)** and **edges** that connect them.
+
+**Key Components:**
+- **Vertices (V)**: Individual nodes in the graph
+- **Edges (E)**: Connections between vertices
+- **Directed**: Edges have direction (A→B ≠ B→A)
+- **Undirected**: Edges are bidirectional (A—B = B—A)
+
+**Example Graph:**
+Directed:          Undirected:
+
+1 → 4              1 — 4
+
+│   ↗              │ ✗ │
+
+└→ 6               4 — 6
+
+#### Graph Representations
+
+**1. Adjacency List (Most Used for Sparse Graphs)**
+Space: O(V + E) — Most efficient
+
+Insert: O(1)
+
+Search: O(degree)
+Graph: 1→[4,6], 4→[1,6], 6→[1,4,8], 8→[1,6]
+ArrayList<Edge>[] arr = new ArrayList[4];
+
+arr[0] = [Edge(1,4), Edge(1,6)]
+
+arr[1] = [Edge(4,1), Edge(4,6)]
+
+arr[2] = [Edge(6,1), Edge(6,4), Edge(6,8)]
+
+arr[3] = [Edge(8,1), Edge(8,6)]
+
+**2. Adjacency Matrix**
+Space: O(V²) — Wasteful for sparse graphs
+
+Insert: O(1)
+
+Search: O(1)
+Graph:   1 4 6 8
+
+1  0 1 1 0
+
+4  1 0 1 0
+
+6  1 1 0 1
+
+8  0 0 1 0
+
+#### BFS (Breadth-First Search)
+
+**What:** Explore all vertices at current depth before moving deeper.
+
+**How:** Use **Queue** (FIFO)
+
+**Algorithm:**
+
+Start from source vertex
+Add to queue, mark as visited
+While queue not empty:
+
+Remove front vertex
+Process it
+Add all unvisited neighbors to queue
+Mark neighbors as visited
+
+
+
+
+**Pattern:**
+Queue operations: add (enqueue), remove (dequeue)
+
+Visited array: track which vertices have been processed
+
+**Time & Space:**
+Time: O(V + E) — visit each vertex and edge once
+
+Space: O(V) — visited array + queue
+
+#### DFS (Depth-First Search)
+
+**What:** Explore as far as possible along each branch before backtracking.
+
+**How:** Use **Recursion** (implicit stack) OR **Stack** (explicit)
+
+**Two Implementations:**
+
+**A) Recursive DFS:**
+Elegant and concise
+
+Natural due to recursion's inherent stack
+
+Easier to understand conceptually
+
+**B) Iterative DFS:**
+Explicit stack management
+
+Avoids stack overflow for very deep graphs
+
+Better for learning how it works
+
+**Algorithm (Recursive):**
+
+Mark current as visited
+Process current
+For each unvisited neighbor:
+
+Recursively call DFS
+
+
+
+
+**Algorithm (Iterative):**
+
+Push source to stack
+While stack not empty:
+
+Pop vertex
+If not visited: mark visited, process
+Push all unvisited neighbors
+
+
+
+
+**Time & Space:**
+Time: O(V + E) — same as BFS
+
+Space: O(V) — visited array + call stack (recursive) or explicit stack
+
+#### Directed vs Undirected Graphs
+
+**Directed (One-way streets):**
+Edge (1→4): Can go from 1 to 4
+
+Cannot go from 4 to 1
+
+Add once: arr[1].add(new Edge(1,4))
+
+**Undirected (Two-way streets):**
+Edge (1—4): Can go both ways
+
+Add twice: arr[1].add(new Edge(1,4))  AND  arr[4].add(new Edge(4,1))
+
+---
+
+### 💻 Key Code Snippets
+
+#### Edge Class Definition
+```java
+public class Edge {
+    int src;    // Source vertex
+    int dest;   // Destination vertex
+    
+    Edge(int src, int dest) {
+        this.src = src;
+        this.dest = dest;
+    }
+}
+```
+
+#### Static Graph Creation (Hardcoded)
+```java
+public void createEdges(ArrayList<Edge>[] arr) {
+    // Time: O(E) where E = number of edges
+    
+    for (int i = 0; i < arr.length; i++) {
+        arr[i] = new ArrayList<>();  // Initialize each vertex's edge list
+    }
+    
+    // Manually add edges (hardcoded)
+    arr[0].add(new Edge(1, 4));
+    arr[0].add(new Edge(1, 6));
+    arr[0].add(new Edge(1, 8));
+    
+    arr[1].add(new Edge(4, 1));
+    arr[1].add(new Edge(4, 6));
+    
+    arr[2].add(new Edge(6, 1));
+    arr[2].add(new Edge(6, 4));
+    arr[2].add(new Edge(6, 8));
+    
+    arr[3].add(new Edge(8, 1));
+    arr[3].add(new Edge(8, 6));
+}
+
+// Resulting Graph:
+//     1
+//    /|\
+//   4-+-6
+//    \|/
+//     8
+```
+
+#### Dynamic Graph Creation (User Input)
+```java
+public void addEdges(ArrayList<Edge>[] arr, int src, int dest) {
+    // Time: O(V) for indexOf (could be O(1) with HashMap)
+    
+    // Add src if not exists
+    if (!arrList.contains(src)) {
+        arrList.add(src);
+    }
+    
+    // Add edge src→dest
+    arr[arrList.indexOf(src)].add(new Edge(src, dest));
+    
+    // For undirected graphs, add reverse edge
+    if (!arrList.contains(dest)) {
+        arrList.add(dest);
+    }
+    
+    arr[arrList.indexOf(dest)].add(new Edge(dest, src));
+}
+
+// User adds edges:
+// Enter Src: 1, Dest: 4
+// Enter Src: 1, Dest: 6
+// Enter Src: 4, Dest: 6
+// Graph dynamically created!
+```
+
+#### BFS (Iterative - Breadth-First Search)
+```java
+public void bfs(ArrayList<Edge>[] arr) {
+    // Time: O(V + E) | Space: O(V)
+    
+    boolean[] visited = new boolean[arr.length];
+    Queue<Integer> q = new LinkedList<>();
+    
+    q.add(0);  // Start from vertex 0
+    visited[0] = true;
+    
+    System.out.print("BFS: ");
+    
+    while (!q.isEmpty()) {
+        int curr = q.remove();  // Dequeue front
+        
+        System.out.print(arrList.get(curr) + " ");  // Process
+        
+        // Visit all unvisited neighbors
+        for (Edge e : arr[curr]) {
+            int neighborIndex = arrList.indexOf(e.dest);
+            
+            if (!visited[neighborIndex]) {
+                visited[neighborIndex] = true;
+                q.add(neighborIndex);  // Enqueue neighbor
+            }
+        }
+    }
+    
+    System.out.println();
+}
+
+// Example Trace:
+// Graph: 1→[4,6], 4→[1,6], 6→[1,4,8], 8→[1,6]
+//
+// Start: Queue=[1], visited=[0]
+// Process 1: Add 4,6 → Queue=[4,6], visited=[0,1,1]
+// Process 4: 1 visited, add 6 (if not visited) → Queue=[6], visited=[0,1,1]
+// Process 6: 1,4 visited, add 8 → Queue=[8], visited=[0,1,1,1]
+// Process 8: All neighbors visited → Queue=[], done
+//
+// Output: BFS: 1 4 6 8
+```
+
+**BFS Visualization (Level-by-Level):**
+Graph:      1
+
+/|
+
+4 6-8
+Level 0: [1]
+
+Level 1: [4, 6]      (neighbors of 1)
+
+Level 2: [8]         (new neighbors of 6)
+
+Output: 1 4 6 8      (one level at a time)
+
+#### DFS Recursive (Depth-First Search)
+```java
+public void dfs(ArrayList<Edge>[] arr, int curr, boolean[] visited) {
+    // Time: O(V + E) | Space: O(V) for recursion stack
+    
+    visited[curr] = true;
+    System.out.print(arrList.get(curr) + " ");  // Process current
+    
+    // Recursively visit all unvisited neighbors
+    for (Edge e : arr[curr]) {
+        int neighborIndex = arrList.indexOf(e.dest);
+        
+        if (!visited[neighborIndex]) {
+            dfs(arr, neighborIndex, visited);  // Recurse deeper
+        }
+    }
+}
+
+// Call: dfs(arr, 0, visited);
+
+// Example Trace:
+// Graph: 1→[4,6], 4→[1,6], 6→[1,4,8], 8→[1,6]
+//
+// dfs(0) → Process 1, visit neighbor 4
+// dfs(1) → Process 4, neighbor 1 visited, try 6
+// dfs(2) → Process 6, neighbors 1,4 visited, visit 8
+// dfs(3) → Process 8, all neighbors visited, return
+// Return to dfs(2)
+// Return to dfs(1)
+// Return to dfs(0)
+//
+// Output: DFS: 1 4 6 8 (depth-first order)
+```
+
+**DFS Recursive Visualization (Call Stack):**
+Graph:      1
+
+/|
+
+4 6-8
+Call Stack:
+
+dfs(1)
+
+├─ dfs(4)
+
+│  └─ dfs(6)
+
+│     └─ dfs(8)
+
+│        └─ return
+
+│     └─ return
+
+│  └─ return
+
+└─ return
+Execution Order (BEFORE returns):
+
+1 (print)
+
+4 (print)
+
+6 (print)
+
+8 (print)
+Output: DFS: 1 4 6 8
+
+#### DFS Iterative (Using Explicit Stack)
+```java
+public void dfsIterative(ArrayList<Edge>[] arr) {
+    // Time: O(V + E) | Space: O(V)
+    
+    boolean[] visited = new boolean[arr.length];
+    Stack<Integer> stack = new Stack<>();
+    
+    stack.push(0);  // Start from vertex 0
+    
+    System.out.print("DFS (Iterative): ");
+    
+    while (!stack.isEmpty()) {
+        int curr = stack.pop();
+        
+        if (!visited[curr]) {
+            visited[curr] = true;
+            System.out.print(arrList.get(curr) + " ");
+            
+            // Push all unvisited neighbors (in reverse for expected order)
+            for (int i = arr[curr].size() - 1; i >= 0; i--) {
+                Edge e = arr[curr].get(i);
+                int neighborIndex = arrList.indexOf(e.dest);
+                
+                if (!visited[neighborIndex]) {
+                    stack.push(neighborIndex);
+                }
+            }
+        }
+    }
+    
+    System.out.println();
+}
+
+// Example Trace:
+// Graph: 1→[4,6], 4→[1,6], 6→[1,4,8], 8→[1,6]
+//
+// Stack=[1], visited=[]
+// Pop 1: Mark visited, add neighbors 6,4 → Stack=[6,4], visited=[1]
+// Pop 4: Mark visited, 1 visited, add 6 → Stack=[6,6], visited=[1,4]
+// Pop 6: Mark visited, neighbors visited → Stack=[6], visited=[1,4,6]
+// Pop 6: Already visited, skip → Stack=[], visited=[1,4,6]
+// Wait, need to push unvisited only...
+//
+// Correct Output: DFS (Iterative): 1 4 6 8
+```
+
+**DFS Iterative Visualization (Stack):**
+Graph:      1
+
+/|
+
+4 6-8
+Stack Operations:
+
+Push 1      → Stack=[1]
+
+Pop 1       → Push 6,4 → Stack=[6,4]
+
+Pop 4       → Push neighbors (1 visited, add 6) → Stack=[6,6]
+
+Pop 6       → Push 8 → Stack=[6,8]
+
+Pop 8       → No unvisited neighbors → Stack=[6]
+
+Pop 6       → Already visited → Stack=[]
+Output: DFS (Iterative): 1 4 6 8
+
+#### Print Graph (Display Adjacency List)
+```java
+public void printGraph(ArrayList<Edge>[] arr) {
+    // Time: O(V + E)
+    
+    for (ArrayList<Edge> arr1 : arr) {
+        System.out.print(arr1.get(0).src + " -> Neighbors: ");
+        
+        for (int i = 0; i < arr1.size(); i++) {
+            Edge e = arr1.get(i);
+            System.out.print("(" + e.src + "," + e.dest + ") ");
+        }
+        
+        System.out.println();
+    }
+}
+
+// Output:
+// 1 -> Neighbors: (1,4) (1,6) (1,8)
+// 4 -> Neighbors: (4,1) (4,6)
+// 6 -> Neighbors: (6,1) (6,4) (6,8)
+// 8 -> Neighbors: (8,1) (8,6)
+```
+
+---
+
+### 🔢 Complexity Analysis
+
+| Operation | Time | Space | Notes |
+|-----------|------|-------|-------|
+| **Create Graph (Static)** | O(E) | O(V+E) | Hardcoded edges |
+| **Add Edge (Dynamic)** | O(V) | O(1) | indexOf is O(V) bottleneck |
+| **BFS** | O(V+E) | O(V) | Queue + visited array |
+| **DFS Recursive** | O(V+E) | O(V) | Call stack depth = height |
+| **DFS Iterative** | O(V+E) | O(V) | Explicit stack |
+| **Print Graph** | O(V+E) | O(1) | Just iteration |
+| **Space (Adjacency List)** | - | O(V+E) | Sparse graphs are efficient |
+| **Space (Adjacency Matrix)** | - | O(V²) | Dense graphs need matrix |
+
+**Why O(V+E)?**
+- Visit each vertex once: O(V)
+- Process each edge once: O(E)
+- Total: O(V+E)
+
+---
+
+### 🎨 Visual Examples
+
+**Static Graph Creation:**
+Code:
+
+arr[0].add(new Edge(1, 4));  // Vertex 0 (value 1)
+
+arr[0].add(new Edge(1, 6));
+
+arr[0].add(new Edge(1, 8));
+Adjacency List:
+
+Vertex 0 → [Edge(1,4), Edge(1,6), Edge(1,8)]
+
+Vertex 1 → [Edge(4,1), Edge(4,6)]
+
+Vertex 2 → [Edge(6,1), Edge(6,4), Edge(6,8)]
+
+Vertex 3 → [Edge(8,1), Edge(8,6)]
+Graph Visualization:
+
+1
+
+/|
+
+4-+-6
+
+|/
+
+8
+
+**BFS Level-by-Level Exploration:**
+Graph: 1—4—6—8
+BFS starting from 1:
+
+Level 0:     [1]         (visited[1]=true)
+
+Queue: [1]
+Level 1:     [1, 4, 6]   (neighbors of 1)
+
+Queue: [4, 6]
+
+visited[4]=true, visited[6]=true
+Level 2:     [1, 4, 6, 8] (neighbors of 4,6)
+
+Queue: [8] (others already visited)
+
+visited[8]=true
+Level 3:     [1, 4, 6, 8] (no new neighbors)
+
+Queue: []
+Output: 1 4 6 8 (breadth-first order)
+
+**DFS Depth-First Exploration:**
+Graph: 1—4—6—8
+DFS starting from 1:
+
+Visit 1        → Stack: []
+
+├─ Visit 4     → Stack: [6]
+
+│  ├─ 1 visited
+
+│  └─ Visit 6  → Stack: [8]
+
+│     ├─ 1 visited
+
+│     ├─ 4 visited
+
+│     └─ Visit 8 → Stack: []
+
+│        └─ (all neighbors visited)
+
+└─ (backtrack)
+Output: 1 4 6 8 (depth-first order)
+For this graph, BFS and DFS give same order!
+
+But in complex graphs, order differs significantly.
+
+**BFS vs DFS Comparison:**
+   1
+  / \
+ 2   3
+/|    |
+4 5    6
+BFS (Queue): 1 → 2 3 → 4 5 6
+
+Level 0: [1]
+
+Level 1: [2, 3]
+
+Level 2: [4, 5, 6]
+DFS (Stack): 1 → 2 → 4 → 5 → 3 → 6
+
+(Or: 1 → 2 → 4 → 5 → 3 → 6 depending on order)
+
+Goes deep on each branch first
+
+---
+
+### 🧪 Practice Problems
+
+**🟢 Easy**
+1. Create an adjacency list from edges
+2. Print graph representation
+3. BFS from a given source vertex
+4. DFS from a given source vertex
+5. Count total vertices and edges
+
+**🟡 Medium**
+6. Count connected components in undirected graph
+7. Detect cycle in undirected graph (DFS)
+8. Shortest path between two vertices (BFS)
+9. Topological sort using DFS (directed acyclic graph)
+10. Find all vertices at distance K from source (BFS)
+11. Bipartite check (2-colorable check using BFS/DFS)
+
+**🔴 Hard**
+12. Number of islands in 2D grid (DFS/BFS)
+13. Longest path in DAG (topological sort + DP)
+14. Strongly connected components (Kosaraju's algorithm)
+15. Minimum spanning tree (Kruskal's or Prim's algorithm)
+16. All paths from source to destination (DFS with backtracking)
+
+---
+
+### ⚠️ Common Mistakes
+
+| ❌ Mistake | ✅ Solution | 💭 Why It Matters |
+|-----------|-----------|------------------|
+| Forgetting to mark as visited | Always set `visited[curr] = true` | Infinite loops, revisiting vertices |
+| Not initializing adjacency list | Do `arr[i] = new ArrayList<>()` for each vertex | NullPointerException when adding edges |
+| Adding edge only one direction (undirected) | Add both `(u→v)` and `(v→u)` | Graph becomes directed by mistake |
+| Using indexOf() inefficiently | Use HashMap for O(1) lookup instead | O(V) per operation becomes slow |
+| Processing vertex multiple times in BFS | Mark as visited when adding to queue, not when removing | Vertex added multiple times |
+| DFS iterative: pushing all neighbors at once | Push in reverse order or use special handling | Traversal order differs from expected |
+| Stack overflow in recursive DFS | Use iterative DFS for very deep graphs | Recursion depth exceeds limit |
+| Confusing Queue and Stack in code | Queue (FIFO) for BFS, Stack (LIFO) for DFS | Wrong data structure = wrong traversal |
+
+---
+
+### 🔗 External Resources
+
+- 📺 **VisuAlgo - Graph**: [BFS & DFS Visualization](https://visualgo.net/en/graphtraversal)
+- 📖 **GeeksforGeeks - Graphs**: [Complete Graph Guide](https://www.geeksforgeeks.org/graph-data-structure-and-algorithms/)
+- 📖 **BFS vs DFS**: [When to Use Which](https://www.geeksforgeeks.org/difference-between-bfs-and-dfs/)
+- 💡 **LeetCode Problems**:
+  - Number of Islands (#200)
+  - Clone Graph (#133)
+  - Course Schedule (#207) — Topological Sort
+  - Word Ladder (#127) — BFS
+  - Reconstruct Itinerary (#332) — DFS/Graphs
+- 🎥 **YouTube**: "Graph Traversals (BFS & DFS)" - Abdul Bari
+
+---
+
+### 📌 Key Takeaways
+
+💡 **BFS = Level-by-level exploration** — Use Queue, great for shortest path  
+💡 **DFS = Go deep first** — Use Stack (iterative) or Recursion, finds all paths  
+💡 **Adjacency List = O(V+E)** — Most efficient for sparse graphs  
+💡 **Always mark visited** — Prevents infinite loops in cyclic graphs  
+💡 **Directed vs Undirected** — Add edges one way or both ways  
+💡 **BFS and DFS both have O(V+E)** — Choose based on problem requirement  
+💡 **Recursive DFS is elegant** but watch stack depth for huge graphs  
+💡 **Graphs are everywhere** — Social networks, maps, recommendations, games!  
+
+---
+
+<!-- End of Day 11: Graphs Traversal -->
+
+## Day 12: Dynamic Programming
+
+**Status**: 🔴 **COMPLETED** | **Difficulty**: 🔴 **Hard** | **File**: `Day12DP.java`
+
+### 🎯 What You'll Learn
+- Understand **Overlapping Subproblems** and **Optimal Substructure**
+- Master the **4 DP Approaches**: Recursion → Memoization → Tabulation → Space Optimization
+- Implement **Fibonacci Series** using all 4 methods with complexity comparison
+- Solve **0/1 Knapsack Problem** - a classic DP application
+- Calculate **Factorials** using tabulation DP
+- Learn **Time vs Space trade-offs** in optimization
+- Recognize **DP vs Greedy** - when to use which
+- Build intuition for recognizing DP problems
+
+### 📚 Concepts Explained
+
+#### What is Dynamic Programming?
+
+**Dynamic Programming (DP)** is an optimization technique that solves problems by:
+1. **Breaking into subproblems** that overlap
+2. **Storing results** to avoid recomputation
+3. **Building solutions** from smaller solutions
+
+**Two Key Characteristics:**
+✅ Optimal Substructure:  Solution = combination of optimal subproblem solutions
+
+✅ Overlapping Subproblems: Same subproblems computed multiple times
+
+**When to use DP:**
+Does problem have overlapping subproblems?   → YES
+
+Can problem be broken into subproblems?      → YES
+
+Can I use previous answers to build new answer? → YES
+
+Then use DYNAMIC PROGRAMMING!
+
+#### The 4 DP Approaches (Evolution)
+
+##### **Approach 1: Pure Recursion ❌ (Slow)**
+
+**What:** Just recursively solve without storing anything.
+
+**Fibonacci Example:**
+fib(5) = fib(4) + fib(3)
+
+= (fib(3) + fib(2)) + (fib(2) + fib(1))
+
+= ((fib(2) + fib(1)) + (fib(1) + fib(0))) + ((fib(1) + fib(0)) + 1)
+Notice: fib(3), fib(2), fib(1), fib(0) are computed MULTIPLE TIMES!
+
+**Problem:** Exponential time complexity - computing same values repeatedly!
+
+**Complexity:**
+Time: O(2^n) — TERRIBLE! ❌
+
+Space: O(n) — Call stack depth
+
+**When to use:** Teaching purposes only, problems are small (n ≤ 10)
+
+---
+
+##### **Approach 2: Memoization 🔄 (Top-Down DP)**
+
+**What:** Recursion + caching results in a data structure (array/map).
+
+**How:**
+
+Before computing, check if answer exists in cache
+If YES: return cached answer
+If NO: compute, store in cache, return
+
+
+**Fibonacci Example:**
+fib(5):
+
+Check arr[5] = -1? NO → Compute
+
+fib(5) = fib(4) + fib(3)
+fib(4):
+
+Check arr[4] = -1? NO → Compute
+
+fib(4) = fib(3) + fib(2)
+fib(3):
+  Check arr[3] = -1? NO → Compute
+  Store arr[3] = 2
+  
+fib(2):
+  Check arr[2] = -1? NO → Compute
+  Store arr[2] = 1
+
+Store arr[4] = 3
+fib(3):
+
+Check arr[3] = -1? NO!
+
+Return arr[3] = 2  ← CACHED! No recomputation
+Store arr[5] = 5
+
+**Advantages:**
+✅ Intuitive - looks like recursion
+
+✅ Only computes needed subproblems
+
+✅ Easy to implement (just add cache)
+
+**Complexity:**
+Time: O(n) — Each unique subproblem solved once
+
+Space: O(n) — Array + call stack depth O(n)
+
+**When to use:** When you need specific subproblems (sparse computation)
+
+---
+
+##### **Approach 3: Tabulation 📊 (Bottom-Up DP)**
+
+**What:** Build solutions iteratively from smallest to largest.
+
+**How:**
+
+Create table (array) for all subproblems
+Fill base cases first
+Iteratively compute larger subproblems
+Return result from table
+
+
+**Fibonacci Example:**
+dp[0] = 0
+
+dp[1] = 1
+Loop i from 2 to n:
+
+dp[i] = dp[i-1] + dp[i-2]
+dp = [0, 1, 1, 2, 3, 5, 8, ...]
+
+**Advantages:**
+✅ Eliminates recursion (no stack overflow)
+
+✅ Clearer iteration logic
+
+✅ Usually faster (no function call overhead)
+
+✅ Better for all subproblems needed
+
+**Complexity:**
+Time: O(n) — Each cell computed once
+
+Space: O(n) — Array of size n
+
+**When to use:** When you need ALL subproblems or want clearer logic
+
+---
+
+##### **Approach 4: Space Optimization 🎯 (Most Efficient)**
+
+**What:** Notice we only need previous values, not entire array.
+
+**Key Insight for Fibonacci:**
+dp[i] = dp[i-1] + dp[i-2]
+
+Only need last 2 values!
+
+**Instead of array, use variables:**
+prev2 = dp[i-2]
+
+prev1 = dp[i-1]
+
+current = prev1 + prev2
+Update:
+
+prev2 = prev1
+
+prev1 = current
+
+**Advantages:**
+✅ Minimal space usage
+
+✅ Still O(n) time
+
+✅ Best space efficiency
+
+**Complexity:**
+Time: O(n) — Same computation
+
+Space: O(1) — Only a few variables!
+
+**When to use:** Final optimization, when space is limited
+
+---
+
+#### DP Approaches Comparison
+
+| Approach | Time | Space | Pros | Cons | When |
+|----------|------|-------|------|------|------|
+| **Recursion** | O(2^n) ❌ | O(n) | Simple | Exponential slow | Teaching only |
+| **Memoization** | O(n) ✅ | O(n) | Intuitive, sparse | Still uses stack | Partial subproblems |
+| **Tabulation** | O(n) ✅ | O(n) | Clear logic, fast | Compute all | All subproblems |
+| **Space Optimized** | O(n) ✅ | O(1) ⭐ | Most efficient | Less intuitive | Production code |
+
+---
+
+#### Classic DP Problem 1: Fibonacci Series
+
+**Problem:** Calculate nth Fibonacci number.
+fib(0) = 0
+
+fib(1) = 1
+
+fib(n) = fib(n-1) + fib(n-2)
+fib(5) = 5
+
+fib(6) = 8
+
+**Why it's DP:**
+- ✅ Optimal Substructure: fib(n) = fib(n-1) + fib(n-2)
+- ✅ Overlapping Subproblems: fib(3) computed multiple times
+
+**Visualization of Overlapping Subproblems:**
+fib(5)
+
+├─ fib(4)
+
+│  ├─ fib(3) ← RECOMPUTED
+
+│  │  ├─ fib(2)
+
+│  │  └─ fib(1)
+
+│  └─ fib(2) ← RECOMPUTED
+
+│     ├─ fib(1)
+
+│     └─ fib(0)
+
+└─ fib(3) ← SAME AS ABOVE! (Overlapping)
+
+├─ fib(2)
+
+└─ fib(1)
+Exponential explosion! Need DP.
+
+---
+
+#### Classic DP Problem 2: 0/1 Knapsack
+
+**Problem:**
+Given:
+
+weights = [1, 3, 4, 5]
+values = [1, 4, 5, 7]
+capacity = 7
+
+Select items to maximize value without exceeding capacity.
+Can each item be selected? YES or NO (0/1) - not unlimited
+
+**Why it's DP:**
+- ✅ For each item: include or exclude (2 choices)
+- ✅ Previous decisions affect future choices
+- ✅ Optimal solution uses optimal subproblem solutions
+
+**Solution Approach (Tabulation):**
+For each item i (0 to n-1):
+
+For each capacity w (capacity down to weight[i]):
+
+dp[w] = max(
+
+dp[w],                              // Don't take item
+
+value[i] + dp[w - weight[i]]        // Take item
+
+)
+Return dp[capacity]
+
+**Example Trace:**
+weights = [1, 3, 4, 5]
+
+values  = [1, 4, 5, 7]
+
+capacity = 7
+Initial: dp = [0, 0, 0, 0, 0, 0, 0, 0]
+Item 0 (w=1, v=1):
+
+dp[7] = max(0, 1 + dp[6]) = 1
+
+dp[6] = max(0, 1 + dp[5]) = 1
+
+dp[5] = max(0, 1 + dp[4]) = 1
+
+dp[4] = max(0, 1 + dp[3]) = 1
+
+dp[3] = max(0, 1 + dp[2]) = 1
+
+dp[2] = max(0, 1 + dp[1]) = 1
+
+dp[1] = max(0, 1 + dp[0]) = 1
+dp = [0, 1, 1, 1, 1, 1, 1, 1]
+Item 1 (w=3, v=4):
+
+dp[7] = max(1, 4 + dp[4]) = max(1, 4+1) = 5
+
+dp[6] = max(1, 4 + dp[3]) = max(1, 4+1) = 5
+
+dp[5] = max(1, 4 + dp[2]) = max(1, 4+1) = 5
+
+dp[4] = max(1, 4 + dp[1]) = max(1, 4+1) = 5
+
+dp[3] = max(1, 4 + dp[0]) = max(1, 4+0) = 4
+dp = [0, 1, 1, 4, 5, 5, 5, 5]
+Item 2 (w=4, v=5):
+
+dp[7] = max(5, 5 + dp[3]) = max(5, 5+4) = 9 ← BEST!
+
+dp[6] = max(5, 5 + dp[2]) = max(5, 5+1) = 6
+
+dp[5] = max(5, 5 + dp[1]) = max(5, 5+1) = 6
+
+dp[4] = max(5, 5 + dp[0]) = max(5, 5+0) = 5
+dp = [0, 1, 1, 4, 5, 6, 6, 9]
+Item 3 (w=5, v=7):
+
+dp[7] = max(9, 7 + dp[2]) = max(9, 7+1) = 9
+
+dp[6] = max(6, 7 + dp[1]) = max(6, 7+1) = 8
+
+dp[5] = max(6, 7 + dp[0]) = max(6, 7+0) = 7
+dp = [0, 1, 1, 4, 5, 7, 8, 9]
+Answer: dp[7] = 9
+
+Items selected: Item 1 (w=3, v=4) + Item 2 (w=4, v=5) = 9 value, 7 weight ✓
+
+---
+
+### 💻 Key Code Snippets
+
+#### Approach 1: Pure Recursion (Exponential - Slow!)
+```java
+public static int recursionFib(int n) {
+    // Time: O(2^n) ❌ TERRIBLE
+    // Space: O(n) call stack
+    
+    if (n <= 1) {
+        return n;  // Base case
+    }
+    
+    return recursionFib(n - 2) + recursionFib(n - 1);
+}
+
+// recursionFib(5) = 5
+// recursionFib(40) = takes FOREVER ⏱️
+```
+
+**Why Slow?**
+fib(5) requires ~15 function calls
+
+fib(10) requires ~177 function calls
+
+fib(40) requires ~2 billion function calls! 😱
+Exponential growth: 2^n
+
+---
+
+#### Approach 2: Memoization (Top-Down DP)
+```java
+public static int memoizationFib(int n, int[] arr) {
+    // Time: O(n) ✅ MUCH BETTER
+    // Space: O(n) array + call stack
+    
+    if (n <= 1) {
+        return n;  // Base case
+    }
+    
+    // Check if already computed
+    if (arr[n] != -1) {
+        return arr[n];  // Return cached result (NO RECOMPUTATION!)
+    }
+    
+    // Compute and store result
+    arr[n] = memoizationFib(n - 1, arr) + memoizationFib(n - 2, arr);
+    
+    return arr[n];
+}
+
+// Initialize: int[] arr = new int[n+1]; Arrays.fill(arr, -1);
+// Call: memoizationFib(5, arr);
+// Result: 5
+
+// memoizationFib(40, arr) = instant! ⚡
+```
+
+**How It Works:**
+memoizationFib(5, arr):
+
+arr[5] = -1? YES → Compute
+memoizationFib(4, arr):
+
+arr[4] = -1? YES → Compute
+memoizationFib(3, arr):
+  arr[3] = -1? YES → Compute → arr[3] = 2
+
+memoizationFib(2, arr):
+  arr[2] = -1? YES → Compute → arr[2] = 1
+
+arr[4] = 3 (stored)
+memoizationFib(3, arr):
+
+arr[3] = -1? NO!
+
+Return arr[3] = 2 ← CACHED! No recursion!
+arr[5] = 5 (stored)
+Array filled: [-1, 1, 1, 2, 3, 5] (memoized results)
+
+**Advantages:**
+✅ Top-down approach (natural thinking)
+
+✅ Only computes what you need
+
+✅ Much faster than recursion O(n) vs O(2^n)
+
+---
+
+#### Approach 3: Tabulation (Bottom-Up DP)
+```java
+public static int tabulationFib(int n, int[] arr) {
+    // Time: O(n) ✅
+    // Space: O(n) array only
+    
+    arr[0] = 0;
+    arr[1] = 1;
+    
+    // Build table from smallest to largest
+    for (int i = 2; i <= n; i++) {
+        arr[i] = arr[i - 1] + arr[i - 2];
+    }
+    
+    return arr[n];
+}
+
+// Initialize: int[] arr = new int[n+1];
+// Call: tabulationFib(5, arr);
+// Result: 5
+
+// arr = [0, 1, 1, 2, 3, 5]
+```
+
+**How It Works:**
+n = 5, arr = [?, ?, ?, ?, ?, ?]
+Step 1: Base cases
+
+arr[0] = 0
+
+arr[1] = 1
+
+arr = [0, 1, ?, ?, ?, ?]
+Step 2: Fill table iteratively
+
+i=2: arr[2] = arr[1] + arr[0] = 1 + 0 = 1
+
+arr = [0, 1, 1, ?, ?, ?]
+i=3: arr[3] = arr[2] + arr[1] = 1 + 1 = 2
+
+arr = [0, 1, 1, 2, ?, ?]
+i=4: arr[4] = arr[3] + arr[2] = 2 + 1 = 3
+
+arr = [0, 1, 1, 2, 3, ?]
+i=5: arr[5] = arr[4] + arr[3] = 3 + 2 = 5
+
+arr = [0, 1, 1, 2, 3, 5]
+Return arr[5] = 5
+
+**Advantages:**
+✅ Bottom-up (clear iteration)
+
+✅ No recursion (no stack overflow)
+
+✅ All subproblems computed once
+
+✅ Fast (no function call overhead)
+
+---
+
+#### Approach 4: Space Optimization (O(1) Space!)
+```java
+public static int spaceOptimizationFib(int n) {
+    // Time: O(n) ✅
+    // Space: O(1) ⭐ BEST!
+    
+    if (n <= 1) return n;
+    
+    int prev2 = 0;      // dp[i-2]
+    int prev1 = 1;      // dp[i-1]
+    int current = 0;    // dp[i]
+    
+    // Only need last 2 values!
+    for (int i = 2; i <= n; i++) {
+        current = prev1 + prev2;
+        prev2 = prev1;      // Shift: prev1 becomes prev2
+        prev1 = current;    // Shift: current becomes prev1
+    }
+    
+    return current;
+}
+
+// spaceOptimizationFib(5) = 5
+```
+
+**How It Works (Step by Step):**
+n = 5
+Initial: prev2=0, prev1=1, current=0
+i=2:
+
+current = prev1 + prev2 = 1 + 0 = 1
+
+prev2 = prev1 = 1
+
+prev1 = current = 1
+
+State: prev2=1, prev1=1
+i=3:
+
+current = prev1 + prev2 = 1 + 1 = 2
+
+prev2 = prev1 = 1
+
+prev1 = current = 2
+
+State: prev2=1, prev1=2
+i=4:
+
+current = prev1 + prev2 = 2 + 1 = 3
+
+prev2 = prev1 = 2
+
+prev1 = current = 3
+
+State: prev2=2, prev1=3
+i=5:
+
+current = prev1 + prev2 = 3 + 2 = 5
+
+prev2 = prev1 = 3
+
+prev1 = current = 5
+
+State: prev2=3, prev1=5
+Return current = 5
+
+**Key Insight:**
+fib(i) = fib(i-1) + fib(i-2)
+
+Only need LAST 2 values!
+
+No need to store entire array!
+
+**Advantages:**
+✅ Minimum space: O(1) variables only
+
+✅ Still O(n) time
+
+✅ Best for production code
+
+---
+
+#### Factorial using Tabulation DP
+```java
+public static int factorialTabulationDP(int n, int[] arr) {
+    // Time: O(n) | Space: O(n)
+    
+    arr[0] = 1;  // 0! = 1
+    arr[1] = 1;  // 1! = 1
+    
+    for (int i = 2; i <= n; i++) {
+        arr[i] = i * arr[i - 1];  // i! = i * (i-1)!
+    }
+    
+    return arr[n];
+}
+
+// factorialTabulationDP(5, arr) = 120
+// arr = [1, 1, 2, 6, 24, 120]
+
+// Why DP?
+// Optimal Substructure: n! = n * (n-1)!
+// Overlapping: If computing multiple factorials, reuse previous results
+```
+
+**Calculation:**
+arr[0] = 1
+
+arr[1] = 1
+
+arr[2] = 2 * arr[1] = 2 * 1 = 2
+
+arr[3] = 3 * arr[2] = 3 * 2 = 6
+
+arr[4] = 4 * arr[3] = 4 * 6 = 24
+
+arr[5] = 5 * arr[4] = 5 * 24 = 120
+
+---
+
+#### 0/1 Knapsack Problem
+```java
+public static int knapsack(int[] weights, int[] values, int capacity) {
+    // Time: O(n * capacity) | Space: O(capacity)
+    
+    int[] dp = new int[capacity + 1];
+    // dp[w] = max value achievable with weight limit w
+    
+    // For each item
+    for (int i = 0; i < weights.length; i++) {
+        
+        // Iterate capacity backwards to avoid using same item twice
+        for (int w = capacity; w >= weights[i]; w--) {
+            
+            // Decision: include item i or not?
+            dp[w] = Math.max(
+                dp[w],                              // Don't take item
+                values[i] + dp[w - weights[i]]      // Take item
+            );
+        }
+    }
+    
+    return dp[capacity];  // Max value with given capacity
+}
+
+// Example:
+// weights = [1, 3, 4, 5]
+// values = [1, 4, 5, 7]
+// capacity = 7
+// Result: 9 (Take items with weight 3 and 4, value 4+5=9)
+```
+
+**Why Iterate Backwards?**
+If we iterate forward:
+
+dp[w] = max(dp[w], values[i] + dp[w - weights[i]])
+When we access dp[w - weights[i]], we might be using the UPDATED value
+
+(which includes item i), meaning we'd use item i TWICE!
+By iterating backward:
+
+When we access dp[w - weights[i]], it's still the OLD value
+
+(before we added item i), so we use each item at most once.
+Example with weights=[1,3], values=[1,4]:
+
+Forward (WRONG):
+
+i=0 (w=1, v=1):
+
+dp[1] = max(0, 1+0) = 1
+
+dp[2] = max(0, 1+1) = 2 ❌ (used item 0 TWICE!)
+
+dp[3] = max(0, 1+2) = 3 ❌ (used item 0 THREE TIMES!)
+Backward (RIGHT):
+
+i=0 (w=1, v=1):
+
+dp[3] = max(0, 1+dp[2]) = 1 (dp[2] is still 0)
+
+dp[2] = max(0, 1+dp[1]) = 1 (dp[1] is still 0)
+
+dp[1] = max(0, 1+dp[0]) = 1 (dp[0] is still 0)
+
+Result: Each item used at most once ✓
+
+---
+
+### 🔢 Complexity Comparison
+
+| Approach | Fibonacci Example | Time | Space | Feasible n |
+|----------|------------------|------|-------|-----------|
+| **Recursion** | 2^n function calls | O(2^n) ❌ | O(n) | n ≤ 30 |
+| **Memoization** | Each value computed once | O(n) ✅ | O(n) | n ≤ 10^6 |
+| **Tabulation** | Fill array iteratively | O(n) ✅ | O(n) | n ≤ 10^6 |
+| **Space Optimized** | Rolling variables | O(n) ✅ | O(1) ⭐ | n ≤ 10^18 |
+
+**Practical Examples:**
+fib(5):      Recursion=31 calls,  Memoization=10 calls ✓
+
+fib(10):     Recursion=177 calls, Memoization=20 calls ✓
+
+fib(20):     Recursion=20K calls, Memoization=40 calls ✓
+
+fib(40):     Recursion=2.3B calls, Memoization=80 calls ✓
+
+fib(100):    Recursion=FOREVER,  Memoization=200 calls ✓
+
+---
+
+### 🎨 Visual Examples
+
+**Recursion Tree (Exponential Explosion):**
+fib(4)
+
+├─ fib(3)
+
+│  ├─ fib(2)
+
+│  │  ├─ fib(1) = 1
+
+│  │  └─ fib(0) = 0
+
+│  └─ fib(1) = 1
+
+└─ fib(2)  ← RECOMPUTED!
+
+├─ fib(1) = 1 ← RECOMPUTED!
+
+└─ fib(0) = 0 ← RECOMPUTED!
+15 nodes! (For just fib(4))
+
+fib(40) would have BILLIONS of nodes 😱
+
+**Memoization (Pruned Tree):**
+memoizationFib(4, [-1,-1,-1,-1,-1])
+fib(4)
+
+├─ fib(3)
+
+│  ├─ fib(2) → arr[2] stored
+
+│  │  ├─ fib(1) = 1
+
+│  │  └─ fib(0) = 0
+
+│  └─ fib(1) = 1
+
+└─ fib(2) → arr[2] RETRIEVED (no recursion!)
+Only 10 nodes!
+
+Subproblems solved: fib(0), fib(1), fib(2), fib(3), fib(4) = 5 problems
+
+Without memoization: 15 redundant calls
+
+With memoization: Direct lookups ✓
+
+**Tabulation (Bottom-Up Build):**
+tabulationFib(5):
+
+arr[0] = 0
+
+arr[1] = 1
+
+arr[2] = arr[1] + arr[0] = 1
+
+arr[3] = arr[2] + arr[1] = 2
+
+arr[4] = arr[3] + arr[2] = 3
+
+arr[5] = arr[4] + arr[3] = 5
+Final array: [0, 1, 1, 2, 3, 5]
+
+No recursion needed!
+
+**Space Optimization (Rolling Variables):**
+Need: fib(5) = fib(4) + fib(3)
+Instead of storing entire array:
+
+Step 1: prev2=0, prev1=1          → fib(0)=0, fib(1)=1
+
+Step 2: current=1, prev2=1, prev1=1    → fib(2)=1
+
+Step 3: current=2, prev2=1, prev1=2    → fib(3)=2
+
+Step 4: current=3, prev2=2, prev1=3    → fib(4)=3
+
+Step 5: current=5, prev2=3, prev1=5    → fib(5)=5
+Only 3 variables!
+
+**Knapsack DP Table:**
+weights = [1, 3, 4, 5]
+
+values = [1, 4, 5, 7]
+
+capacity = 7
+  w=0  w=1  w=2  w=3  w=4  w=5  w=6  w=7
+Item0   0    1    1    1    1    1    1    1
+
+Item1   0    1    1    4    5    5    5    5
+
+Item2   0    1    1    4    5    6    6    9 ← Max value with cap 7
+
+Item3   0    1    1    4    5    7    8    9
+Item selections:
+
+Capacity 7: Take Item2(w=4,v=5) + Item1(w=3,v=4) = weight 7, value 9 ✓
+
+
+---
+
+### 🧪 Practice Problems
+
+**🟢 Easy**
+1. Fibonacci number (implement all 4 approaches)
+2. Factorial (tabulation)
+3. Sum of n natural numbers (DP)
+4. Climbing stairs (n steps, 1 or 2 steps at a time)
+5. House robber (steal non-adjacent houses)
+
+**🟡 Medium**
+6. 0/1 Knapsack problem
+7. Longest increasing subsequence (LIS)
+8. Coin change (minimum coins for amount)
+9. Longest common subsequence (LCS)
+10. Rod cutting problem
+11. Matrix chain multiplication
+12. Edit distance (transform string A to B)
+
+**🔴 Hard**
+13. Unbounded knapsack (items can be repeated)
+14. Longest palindromic subsequence
+15. Word break (can word be segmented)
+16. Partition equal subset sum
+17. Maximum sum subarray (Kadane's algorithm)
+18. Number of ways to decode (decode patterns)
+
+---
+
+### ⚠️ Common Mistakes
+
+| ❌ Mistake | ✅ Solution | 💭 Why It Matters |
+|-----------|-----------|------------------|
+| Forgetting base cases | Always define n≤1 or n≤0 | Infinite recursion or wrong answer |
+| Not initializing memoization array with -1 | Use Arrays.fill(arr, -1) | Can't distinguish 0 (computed) from uncomputed |
+| Checking memoization after computing | Check BEFORE recursing, not after | Defeats purpose; still does redundant work |
+| Forgetting to store result in memoization | Always do arr[n] = result before return | Next call recomputes instead of using cache |
+| Using recursion for large n | Switch to tabulation or space-optimization | Stack overflow from deep recursion |
+| Iterating forward in 0/1 knapsack | Always iterate backward | Using same item multiple times (wrong) |
+| Confusing 0/1 knapsack with unbounded | 0/1: each item max once; Unbounded: unlimited | Different algorithm needed |
+| Not understanding why DP works | Verify: overlapping subproblems + optimal substructure | Just memorizing code doesn't help |
+
+---
+
+### 🔗 External Resources
+
+- 📺 **VisuAlgo - DP**: [Dynamic Programming Visualization](https://visualgo.net/)
+- 📖 **GeeksforGeeks - DP**: [Complete DP Guide](https://www.geeksforgeeks.org/dynamic-programming/)
+- 📖 **DP Approaches**: [Recursion to Space Optimization](https://www.geeksforgeeks.org/fundamentals-of-algorithms/#DynamicProgramming)
+- 💡 **LeetCode Problems**:
+  - Fibonacci Number (#509)
+  - House Robber (#198)
+  - Coin Change (#322)
+  - Longest Increasing Subsequence (#300)
+  - 0/1 Knapsack (classic)
+  - Edit Distance (#72)
+  - Longest Common Subsequence (#1143)
+- 🎥 **YouTube**: "Dynamic Programming Full Course" - Abdul Bari
+
+---
+
+### 📌 Key Takeaways
+
+💡 **Recursion → Memoization → Tabulation → Space Opt** — Evolution of solutions  
+💡 **Overlapping subproblems + optimal substructure = DP candidate** — Spot DP problems!  
+💡 **Memoization is intuitive** — Recursion + caching  
+💡 **Tabulation avoids recursion** — Better for large n (no stack overflow)  
+💡 **Space optimization is ultimate** — O(n) time with O(1) space!  
+💡 **0/1 Knapsack is classic** — Master it for interview confidence  
+💡 **Time vs Space trade-off** — Often can optimize space after getting correct time  
+💡 **DP is about reusing work** — Don't recompute same subproblems!  
+
+---
+
+<!-- End of Day 12: Dynamic Programming -->
+
 
 # 🔧 Reference Materials
 
