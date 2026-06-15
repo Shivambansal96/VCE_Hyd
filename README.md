@@ -37,9 +37,8 @@ This repository is your complete companion for understanding how data is organiz
 | 🔴 Done | **Day 8A** | [Recursion](#day-8-recursion) | 🔴 Hard | `Day8Recursion.java` |
 | 🔴 Done | **Day 8B** | [Trees & Binary Trees](#day-8-trees--binary-trees) | 🔴 Hard | `Day8BT.java` |
 | 🔴 Done | **Day 9** | [Binary Search Trees](#day-9-binary-search-trees) | 🔴 Hard | `Day9BST.java` |
-
 | 🔴 Done | **Day 10** | [Graphs](#day-10-graphs) | 🟡 Medium | `Day10Graphs.java` |
-| 🔴 Done | **Day 11** | [Graphs Traversal](#day-11-graphs-traversal) | 🔴 Hard | `Day11Graphs.java` |
+| 🔴 Done | **Day 11** | [Graphs Traversal](#day-11-graphs-traversal) | 🔴 Hard | `Day11Graphs.java` |****
 | 🔴 Done | **Day 12** | [Dynamic Programming](#day-12-dynamic-programming) | 🔴 Hard | `Day12DP.java` |
 
 ---
