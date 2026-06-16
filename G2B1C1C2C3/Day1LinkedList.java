@@ -100,7 +100,7 @@
 //     }
 // }
 // // // // // DOUBLY LINKED LIST
-public class LinkedList {
+public class Day1LinkedList {
 
     Node head;
     Node tail;
@@ -119,7 +119,8 @@ public class LinkedList {
         }
     }
 
-    LinkedList() {
+    @SuppressWarnings("unused")
+    Day1LinkedList() {
         System.out.println("LL Created.");
     }
 
@@ -191,7 +192,7 @@ public class LinkedList {
 
     public static void main(String[] args) {
 
-        LinkedList ll = new LinkedList();
+        Day1LinkedList ll = new Day1LinkedList();
 
         // ll.insertStart(30);
         // ll.insertStart(20);
