@@ -1,4 +1,5 @@
 
+import java.util.Collections;
 import java.util.PriorityQueue;
 import java.util.Queue;
 
@@ -164,14 +165,14 @@ public class Day3Collections {
         // pq.poll();
         // System.out.println(pq);
 // // =============== QUEUES INTERFACE QUESTION ==============================  
-        Queue<Integer> pq = new PriorityQueue<>();
+        Queue<Integer> pq = new PriorityQueue<>(Collections.reverseOrder());
         int[] arr = {5, 1, 10, 3, 12, 2, 8};
         int k = 3;
 
         for (int i = 0; i < arr.length; i++) {
             pq.offer(arr[i]);
 
-            if (i >= k) {
+            if (pq.size() > k) {
                 pq.poll();
             }
         }
