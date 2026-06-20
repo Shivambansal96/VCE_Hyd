@@ -109,28 +109,21 @@ public class Day4Stacks {
     public static boolean validParentheses(String s) {
         Stack<Character> stk = new Stack<>();
 
-        if (s.charAt(0) == ')' || s.charAt(0) == '}' || s.charAt(0) == ']') {
-            return false;
-        }
         for (int i = 0; i < s.length(); i++) {
             Character ch = s.charAt(i);
             if (ch == '(' || ch == '{' || ch == '[') {
                 stk.push(ch);
             } else {
-                if (!stk.isEmpty()) {
-                    while (stk.peek() == '(' && s.charAt(i) == ')' || stk.peek() == '{' && s.charAt(i) == '}' || stk.peek() == '[' && s.charAt(i) == ']') {
-                        stk.pop();
-                    }
+                if (stk.isEmpty()) {
+                    return false;
+                }
+                if (stk.peek() == '(' && ch == ')' || stk.peek() == '{' && ch == '}' || stk.peek() == '[' && ch == ']') {
+                    stk.pop();
                 }
             }
         }
 
-        // return true ? stk.isEmpty() : false;
-        if (stk.isEmpty()) {
-            return true;
-        } else {
-            return false;
-        }
+        return stk.isEmpty();
 
     }
 
