@@ -114,7 +114,6 @@ public class Day6TwoPointers {
             int window = right - left + 1;
             maxLen = Math.max(maxLen, window);
         }
-
         System.out.println(maxLen);
     }
 
