@@ -71,6 +71,8 @@ public class Day9BST {
 
         Queue<Node> q = new LinkedList<>();
 
+        q.offer(root);
+
         while (!q.isEmpty()) {
             int qSize = q.size();
 
@@ -94,15 +96,15 @@ public class Day9BST {
 
     public Node deleteNode(Node root, int val) {
 
+        if (root == null) {
+            return null;
+        }
+
         if (val > root.data) {
             root.right = deleteNode(root.right, val);  // 6   
-        }
-        
-        else if (val < root.data) {
+        } else if (val < root.data) {
             root.left = deleteNode(root.left, val);
-        } 
-        
-        else { // root.data == val
+        } else { // root.data == val
 
             // 0 child
             if (root.left == null && root.right == null) {
