@@ -171,8 +171,6 @@ public class Day2LinkedList {
         return newNode;
     }
 
-    
-
     public void printList() {
         Node current = head;
 
