@@ -1,5 +1,4 @@
 
-// //     public static void main(String[] args) {
 // //         List<Integer> arrList = new ArrayList<>();
 // //         arrList.add(10);
 // //         arrList.add(20);
@@ -93,10 +92,6 @@
 //         }
 //     }
 // }
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
 
 public class Day3Collections {
 
@@ -163,20 +158,20 @@ public class Day3Collections {
         // };
         // Collections.sort(arrList, cmp);
         // System.out.println(arrList);
-// // ========== COMPARATOR (LAMBDA) ==================
-        ArrayList<Integer> arrList = new ArrayList<>(Arrays.asList(9, 42, 1, 32, 45, 67));
+// // // ========== COMPARATOR (LAMBDA) ==================
+        // ArrayList<Integer> arrList = new ArrayList<>(Arrays.asList(9, 42, 1, 32, 45, 67));
 
-        Comparator<Integer> cmp = (Integer a, Integer b) -> {
-            if (a % 2 >= b % 2) {
-                return -1;
-            } else {
-                return 1;
-            }
-        };
+        // Comparator<Integer> cmp = (Integer a, Integer b) -> {
+        //     if (a % 2 >= b % 2) {
+        //         return -1;
+        //     } else {
+        //         return 1;
+        //     }
+        // };
 
-        Collections.sort(arrList, cmp);
+        // Collections.sort(arrList, cmp);
 
-        System.out.println(arrList);
+        // System.out.println(arrList);
 
     }
 }
