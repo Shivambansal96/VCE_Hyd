@@ -190,12 +190,13 @@ public class Day5Stacks {
 
         Arrays.fill(leftRes, -1);
         Arrays.fill(rightRes, arr.length);
+
+        leftRes = stk.previousSmallerIndex(arr, leftRes, stk);
+        rightRes = stk.nextSmallerIndex(arr, rightRes, stk);
         // res = stk.nextGreaterElement(arr, res, stk);
         // res = stk.previousGreaterElement(arr, res, stk);
         // res = stk.nextSmallerElement(arr, res, stk);
         // res = stk.previousSmallerElement(arr, res, stk);
-        leftRes = stk.previousSmallerIndex(arr, leftRes, stk);
-        rightRes = stk.nextSmallerIndex(arr, rightRes, stk);
 
         // for (int val : leftRes) {
         //     System.out.print(val + " ");
