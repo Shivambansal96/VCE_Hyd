@@ -263,7 +263,6 @@ public class Day4Stacks {
             }
             stk.push(arr[i]);
         }
-
         return res;
     }
 

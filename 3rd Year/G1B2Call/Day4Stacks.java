@@ -1,11 +1,12 @@
 
+import java.util.HashMap;
+
 public class Day4Stacks {
 
     int size;
     int[] arr;
     int top;
 
-    @SuppressWarnings("static-access")
     public Day4Stacks(int size) {
         this.arr = new int[size];
         this.top = -1;
@@ -65,6 +66,11 @@ public class Day4Stacks {
 
     public boolean validParentheses(String s, Day4Stacks stk) {
 
+        HashMap<Character, Character> hashMap = new HashMap<>();
+        hashMap.put(')', '(');
+        hashMap.put('}', '{');
+        hashMap.put(']', '[');
+
         for (int i = 0; i < s.length(); i++) {
             Character ch = s.charAt(i);
             if (ch == '(' || ch == '[' || ch == '{') {
@@ -73,7 +79,7 @@ public class Day4Stacks {
                 if (isEmpty()) {
                     return false;
                 } else {
-                    if (stk.peek() == '(' && ch == ')' || stk.peek() == '{' && ch == '}' || stk.peek() == '[' && ch == ']') {
+                    if (stk.peek() == hashMap.get(ch) || stk.peek() == hashMap.get(ch) || stk.peek() == hashMap.get(ch)) {
                         stk.pop();
                     } else {
                         return false;
@@ -90,7 +96,7 @@ public class Day4Stacks {
 
         Day4Stacks stk = new Day4Stacks(3);
 
-        String s = "{})";
+        String s = "({})[])";
 
         System.out.println("Is Parentheses valid ? ");
         System.out.println(stk.validParentheses(s, stk));
