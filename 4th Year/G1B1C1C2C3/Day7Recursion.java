@@ -182,7 +182,7 @@ public class Day7Recursion {
         // MOVE DOWN
         int down = countTotalPaths(i + 1, j, n, m);
 
-        return right + down;
+        return down + right;
 
     }
 
