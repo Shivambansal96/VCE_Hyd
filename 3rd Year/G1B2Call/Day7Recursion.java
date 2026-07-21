@@ -147,16 +147,17 @@ public class Day7Recursion {
         }
 
         // Right to Left
-        for (int i = right - 1; i >= 0; i--) {
+        for (int i = right - 1; i >= left; i--) {
             System.out.print(mat[bottom][i] + " ");
         }
 
         // Bottom to Top
-        for (int i = bottom - 1; i > 0; i--) {
+        for (int i = bottom - 1; i > top; i--) {
             System.out.print(mat[i][left] + " ");
         }
 
         spiralMatrix(mat, top + 1, left + 1, right - 1, bottom - 1);
+
     }
 
     public static void main(String[] args) {
@@ -181,17 +182,17 @@ public class Day7Recursion {
         // int n = 3;
         // int m = 3;
         // System.out.println(countPaths(0, 0, n, m));
-        // int[][] mat = {
-        //     {1, 2, 3, 4},
-        //     {12, 13, 14, 5},
-        //     {11, 16, 15, 6},
-        //     {10, 9, 8, 7}
-        // };
         int[][] mat = {
-            {1, 2, 3},
-            {8, 9, 4},
-            {7, 6, 5}
+            {1, 2, 3, 4},
+            {12, 13, 14, 5},
+            {11, 16, 15, 6},
+            {10, 9, 8, 7}
         };
+        // int[][] mat = {
+        //     {1, 2, 3},
+        //     {8, 9, 4},
+        //     {7, 6, 5}
+        // };
 
         int n = mat.length - 1;
         int m = mat[0].length - 1;
