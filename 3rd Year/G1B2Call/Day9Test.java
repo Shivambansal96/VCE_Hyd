@@ -1,4 +1,7 @@
 
+import java.util.ArrayDeque;
+import java.util.Deque;
+
 public class Day9Test {
 
     public static void evacuationBoats(int[] arr, int limit) {
@@ -21,27 +24,60 @@ public class Day9Test {
 
     }
 
-    public static void adaptiveCooling(int[] arr, int k) {
-        // int[] arr = {10, 12, 15, 11, 14, 18, 19, 13};
+    // public static void adaptiveCooling(int[] arr, int k) {
+    //     // int[] arr = {10, 12, 15, 11, 14, 18, 19, 13};
+    //     int maxLen = 0;
+    //     for (int i = 0; i < arr.length; i++) {
+    //         int min = arr[i];
+    //         int max = arr[i];
+    //         for (int j = i; j < arr.length; j++) {
+    //             max = Math.max(max, arr[j]);
+    //             min = Math.min(min, arr[j]);
+    //             if (max - min <= k) {
+    //                 int window = j - i + 1;
+    //                 maxLen = Math.max(maxLen, window);
+    //             }
+    //         }
+    //     }
+    //     System.out.println(maxLen);
+    // }
+    public static void adaptiveCooling(int[] arr, int K) {
+        Deque<Integer> maxDeque = new ArrayDeque<>();
+        Deque<Integer> minDeque = new ArrayDeque<>();
 
-        int maxLen = 0;
-        for (int i = 0; i < arr.length; i++) {
-            int min = arr[i];
-            int max = arr[i];
+        int left = 0;
+        int ans = 0;
+        int N = arr.length;
 
-            for (int j = i; j < arr.length; j++) {
+        for (int right = 0; right < N; right++) {
 
-                max = Math.max(max, arr[j]);
-                min = Math.min(min, arr[j]);
-
-                if (max - min <= k) {
-                    int window = j - i + 1;
-                    maxLen = Math.max(maxLen, window);
-                }
+            while (!maxDeque.isEmpty() && arr[maxDeque.peekLast()] <= arr[right]) {
+                maxDeque.pollLast();
             }
-        }
-        System.out.println(maxLen);
+            maxDeque.offerLast(right);
 
+            while (!minDeque.isEmpty() && arr[minDeque.peekLast()] >= arr[right]) {
+                minDeque.pollLast();
+            }
+            minDeque.offerLast(right);
+
+            while (arr[maxDeque.peekFirst()] - arr[minDeque.peekFirst()] > K) {
+
+                if (maxDeque.peekFirst() == left) {
+                    maxDeque.pollFirst();
+                }
+
+                if (minDeque.peekFirst() == left) {
+                    minDeque.pollFirst();
+                }
+
+                left++;
+            }
+
+            ans = Math.max(ans, right - left + 1);
+        }
+
+        System.out.println(ans);
     }
 
     public static void main(String[] args) {

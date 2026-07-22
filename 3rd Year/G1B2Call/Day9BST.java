@@ -111,16 +111,12 @@ public class Day9BST {
 
         Day9BST bst = new Day9BST();
 
+        int[] arr = {5, 15, 22, 10, 20, 25, 60, 50, 40};
+
         Node root = null;
-        root = bst.insert(root, 5);
-        root = bst.insert(root, 10);
-        root = bst.insert(root, 15);
-        root = bst.insert(root, 20);
-        root = bst.insert(root, 22);
-        root = bst.insert(root, 25);
-        root = bst.insert(root, 40);
-        root = bst.insert(root, 50);
-        root = bst.insert(root, 60);
+        for (int i = 0; i < arr.length; i++) {
+            root = bst.insert(root, arr[i]);
+        }
 
         bst.inOrder(root);
         System.out.println();
