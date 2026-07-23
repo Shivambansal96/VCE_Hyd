@@ -78,6 +78,17 @@ public class Day9BST {
         return root;
     }
 
+    public int heightOfTree(Node root) {
+        if (root == null) {
+            return -1;
+        }
+
+        int leftChild = heightOfTree(root.left);
+        int rightChild = heightOfTree(root.right);
+
+        return Math.max(leftChild, rightChild) + 1;
+    }
+
     public Node inOrderSuccessor(Node root) {
 
         while (root.left != null) {
@@ -111,21 +122,20 @@ public class Day9BST {
 
         Day9BST bst = new Day9BST();
 
-        int[] arr = {5, 15, 22, 10, 20, 25, 60, 50, 40};
+        int[] arr = {20, 15, 22, 10, 5, 25, 60, 50, 40};
 
         Node root = null;
         for (int i = 0; i < arr.length; i++) {
             root = bst.insert(root, arr[i]);
         }
 
-        bst.inOrder(root);
-        System.out.println();
-
+        // bst.inOrder(root);
+        // System.out.println();
         // System.out.println(bst.searchKey(20, root) ? "Target Found" : "Target NOT Found");
-        bst.deleteNode(root, 25);
-
-        bst.inOrder(root);
-        System.out.println();
+        // bst.deleteNode(root, 25);
+        // bst.inOrder(root);
+        // System.out.println();
+        System.out.println(bst.heightOfTree(root));
 
     }
 
