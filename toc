@@ -12,7 +12,7 @@
 // Graphs
 // DP and Heap
 
-// // Batch 2 - 11 Days
+// // Batch 2 - 9 Days
 // Singly Linked List
 // Doubly and Circular Linked List
 // Collections
@@ -24,5 +24,20 @@
 // Recursion and BackTracking
 // BackTracking and Binary Trees
 // Binary Search Trees and Graphs
-// Graphs and DP
 
+// // Batch 3 - 10 Days
+// Searching and Singly Linked List
+// Doubly and Circular Linked List
+// Collections
+// Stack
+// Queues
+
+
+// Two Pointer || Sliding window
+// Recursion and BackTracking
+// BackTracking and Binary Trees
+// Binary Search Trees and Graphs
+
+
+// // Batch 4 - 10 Days
+// Searching and Singly Linked List
