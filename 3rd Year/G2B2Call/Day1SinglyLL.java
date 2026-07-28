@@ -101,6 +101,8 @@ public class Day1SinglyLL {
         System.out.println("None");
     }
 
+    
+
     public static void main(String[] args) {
 
         Day1SinglyLL sll = new Day1SinglyLL();
