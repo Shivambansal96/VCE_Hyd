@@ -5,7 +5,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
-public class Day3Collections {
+public class Day3ACollections {
 
     public static void main(String[] args) {
         // // // ================= LIST INTERFACE ====================
