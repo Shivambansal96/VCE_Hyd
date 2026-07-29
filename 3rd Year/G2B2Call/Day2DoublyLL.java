@@ -98,7 +98,7 @@ public class Day2DoublyLL {
             System.out.println("LL is already Empty!");
         } else if (pos == 1) {
             this.deleteStart();
-        } else if (pos == len) {
+        } else if (pos == ++len) {
             this.deleteEnd();
         } else {
             Node current = head;
@@ -108,7 +108,6 @@ public class Day2DoublyLL {
             current.next = current.next.next;
             current.next.prev = current;
         }
-
     }
 
     public void printList() {
