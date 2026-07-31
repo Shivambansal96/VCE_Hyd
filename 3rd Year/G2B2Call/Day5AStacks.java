@@ -121,20 +121,48 @@ public class Day5AStacks {
     }
 
     // ================ LARGEST RECTANGLE IN HISTOGRAM ===========
+    public static int largestRectangle(int[] arr, int n) {
+
+        int[] leftRes = new int[n];
+        int[] rightRes = new int[n];
+
+        Arrays.fill(leftRes, -1);
+        Arrays.fill(rightRes, n);
+
+        leftRes = previousSmallerIndex(arr, leftRes);
+        rightRes = nextSmallerIndex(arr, rightRes);
+
+        int maxArea = 0;
+        for (int i = 0; i < n; i++) {
+            int length = arr[i];
+            int breadth = rightRes[i] - leftRes[i] - 1;
+            int currentArea = length * breadth;
+            maxArea = Math.max(currentArea, maxArea);
+        }
+
+        return maxArea;
+
+    }
+
     public static void main(String[] args) {
 
-        int[] arr = {4, 5, 2, 10, 8};
-        int[] res = new int[arr.length];
-        Arrays.fill(res, -1);
-        res = nextGreaterElement(arr, res);
-        res = nextSmallerElement(arr, res);
-        res = previousSmallerElement(arr, res);
-        res = previousGreaterElement(arr, res);
-        res = nextSmallerIndex(arr, res);
-        res = previousSmallerIndex(arr, res);
-        for (int val : res) {
-            System.out.print(val + " ");
-        }
+        // int[] arr = {4, 5, 2, 10, 8};
+        // int[] res = new int[arr.length];
+        // Arrays.fill(res, -1);
+        // res = nextGreaterElement(arr, res);
+        // res = nextSmallerElement(arr, res);
+        // res = previousSmallerElement(arr, res);
+        // res = previousGreaterElement(arr, res);
+        // res = nextSmallerIndex(arr, res);
+        // res = previousSmallerIndex(arr, res);
+        // for (int val : res) {
+        //     System.out.print(val + " ");
+        // }
+        int[] arr = {2, 1, 5, 6, 2, 3};
+
+        int n = arr.length;
+
+        System.out.println(largestRectangle(arr, n));
 
     }
 }
