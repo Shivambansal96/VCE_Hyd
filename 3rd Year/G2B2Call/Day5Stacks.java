@@ -2,7 +2,7 @@
 import java.util.Arrays;
 import java.util.Stack;
 
-public class Day5AStacks {
+public class Day5Stacks {
 
     // // ================== NEXT GREATER ELEMENT ==========================
     public static int[] nextGreaterElement(int[] arr, int[] res) {
