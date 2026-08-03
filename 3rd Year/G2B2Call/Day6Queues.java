@@ -52,7 +52,7 @@ public class Day6Queues {
     }
 
     public int poll() {
-        int top = -1;
+        int top;
         if (isEmpty()) {
             System.out.println("Queue is already Empty!!");
             return 0;
@@ -76,7 +76,7 @@ public class Day6Queues {
     }
 
     public int pollLast() {
-        int top = -1;
+        int top;
         if (isEmpty()) {
             System.out.println("Queue is already Empty!!");
             return 0;
