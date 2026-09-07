@@ -10,6 +10,7 @@
 //             this.next = null;
 //         }
 //     }
+
 //     public static void main(String[] args) {
 //         Day1LinkedList sll = new Day1LinkedList();
 //         Node A = new Node(1);
@@ -27,6 +28,7 @@
 //             System.out.print(current.data + " -> ");
 //             current = current.next;
 //         }
+
 //         // System.out.print(current.data);
 //         System.out.print("None");
 //     }

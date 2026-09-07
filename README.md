@@ -6,7 +6,7 @@
 ![Level](https://img.shields.io/badge/Level-Intermediate-yellow?style=flat-square)
 ![Course](https://img.shields.io/badge/Course-VCE%204th%20Yr%20Sem%201-blue?style=flat-square)
 ![Days](https://img.shields.io/badge/Duration-12%20Days-brightgreen?style=flat-square)
-![Status](https://img.shields.io/badge/Status-In%20Progress%20🔄-orange?style=flat-square)
+![Status](https://img.shields.io/badge/Status-Completed%20🔄-orange?style=flat-square)
 
 
 

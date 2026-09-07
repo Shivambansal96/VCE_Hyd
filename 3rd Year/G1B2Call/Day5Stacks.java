@@ -206,6 +206,7 @@ public class Day5Stacks {
         //     System.out.print(val + " ");
         // }
         // System.out.println();
+        
         int maxArea = 0;
         for (int i = 0; i < arr.length; i++) {
             int window = rightRes[i] - leftRes[i] - 1;
