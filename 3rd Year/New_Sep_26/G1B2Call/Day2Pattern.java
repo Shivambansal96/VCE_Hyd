@@ -1,5 +1,5 @@
 
-import java.util.*;
+import java.util.Scanner;
 
 public class Day2Pattern {
 
@@ -28,7 +28,7 @@ public class Day2Pattern {
         //     System.out.println();
         // }
         // =============================================================================== //
-        System.out.print("Enter the number of rows: ");
+        System.out.print("Enter the no. of rows: ");
         int n = sc.nextInt();
 
         System.out.println();
@@ -37,7 +37,7 @@ public class Day2Pattern {
         // // // // Pattern 1  // // //
         // for (int row = 0; row < n; row++) {
         //     for (int col = 0; col <= row; col++) {
-        //         System.out.print((row + 1) * (col + 1) + " ");
+        //         // System.out.print((row + 1) * (col + 1) + " ");
         //         // System.out.print("* ");
         //         // System.out.print((col + 1) + " ");
         //         // char c = (char) (col + 65);
@@ -54,15 +54,15 @@ public class Day2Pattern {
         //     System.out.println();
         // }
         // System.out.println("-----------------------------");
-        // // // // Pattern 2  // // //
-        // for (int i = 0; i < n; i++) {
-        //     for (int j = n - 1; j >= i; j--) {
-        //         // System.out.print("* ");
-        //         // System.out.print(j + 1 + " ");
-        //         System.out.print(i + 1 + " ");
-        //     }
-        //     System.out.println();
-        // }
+        // // // Pattern 2  // // //
+        for (int i = 0; i < n; i++) {
+            for (int j = n - 1; j >= i; j--) {
+                // System.out.print("* ");
+                // System.out.print(j + 1 + " ");
+                System.out.print(i + 1 + " ");
+            }
+            System.out.println();
+        }
         // for (int i = n; i > 0; i--) {
         //     for (int j = i; j > 0; j--) {
         //         System.out.print((i * j) + " ");
@@ -82,17 +82,17 @@ public class Day2Pattern {
         //     }
         //     System.out.println();
         // }
-        for (int i = 0; i < n; i++) {
-            for (int j = 0; j < n; j++) {
+        // for (int i = 0; i < n; i++) {
+        //     for (int j = 0; j < n; j++) {
 
-                if (i == j || i + j == n - 1) {
-                    System.out.print("* ");
-                } else {
-                    System.out.print("  ");
-                }
-            }
-            System.out.println();
-        }
+        //         if (i == j || i + j == n - 1) {
+        //             System.out.print("* ");
+        //         } else {
+        //             System.out.print("  ");
+        //         }
+        //     }
+        //     System.out.println();
+        // }
 
     }
 }
