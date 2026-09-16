@@ -107,25 +107,27 @@ public class Day3Pattern {
         //     }
         //     System.out.println();
         // }
+
+        // System.out.println("=======================");
         // ======================================================== //
-        // for (int i = 0; i < (n/2)+1; i++) {
-        //     for (int space = i; space < (n/2); space++) {
-        //         System.out.print(" ");
-        //     }
-        //     for (int stars = 0; stars <= i; stars++) {
-        //         System.out.print("* ");
-        //     }
-        //     System.out.println();
-        // }
-        // for (int i = 0; i < (n/2); i++) {
-        //     for (int spaces = 0; spaces <= i; spaces++) {
-        //         System.out.print(" ");
-        //     }
-        //     for (int stars = (n/2) - 1; stars >= i; stars--) {
-        //         System.out.print("* ");
-        //     }
-        //     System.out.println();
-        // }
+        for (int i = 0; i < (n/2)+1; i++) {
+            for (int space = i; space < (n/2); space++) {
+                System.out.print(" ");
+            }
+            for (int stars = 0; stars <= i; stars++) {
+                System.out.print("* ");
+            }
+            System.out.println();
+        }
+        for (int i = 0; i < (n/2); i++) {
+            for (int spaces = 0; spaces <= i; spaces++) {
+                System.out.print(" ");
+            }
+            for (int stars = (n/2) - 1; stars >= i; stars--) {
+                System.out.print("* ");
+            }
+            System.out.println();
+        }
         // ======================================================== //
         // for (int i = 0; i < n; i++) {
 

@@ -42,49 +42,49 @@ public class Day2Pattern {
         //  =================================== //
         // // // Pattern 3 // // //
         //  =================================== //
-        for(int i = 0; i < n; i++) {
-            for(int spaces = n-1; spaces > i; spaces--) {
-                System.out.print(" ");
-            }
-            for(int stars = 0; stars <= i ; stars++) {
-                System.out.print("* ");
-                // System.out.print(i);
-                // System.out.print(j);
-            }
-            System.out.println();
-        }
+        // for(int i = 0; i < n; i++) {
+        //     for(int spaces = n-1; spaces > i; spaces--) {
+        //         System.out.print(" ");
+        //     }
+        //     for(int stars = 0; stars <= i ; stars++) {
+        //         System.out.print("* ");
+        //         // System.out.print(i);
+        //         // System.out.print(j);
+        //     }
+        //     System.out.println();
+        // }
         //  =================================== //
         // // // PYRAMID Pattern // // //
         //  =================================== //
-        // for (int i = 0; i < n; i++) {
+        for (int i = 0; i < n; i++) {
 
-        //     for (int spaces = n - 1; spaces > i; spaces--) {
-        //         System.out.print(" ");
-        //     }
+            for (int spaces = n - 1; spaces > i; spaces--) {
+                System.out.print("  ");
+            }
 
-        //     for (int stars = 0; stars < (2 * i) + 1; stars++) {
-        //         System.out.print("* ");
-        //         // System.out.print(i+1 +  " ");
-        //         // System.out.print(stars + 1 + " ");
-        //     }
+            for (int stars = 0; stars < (2 * i) + 1; stars++) {
+                // System.out.print("* ");
+                // System.out.print(i+1 +  " ");
+                System.out.print(stars + 1 + " ");
+            }
 
-        //     System.out.println();
+            System.out.println();
 
-        // }
+        }
 
         //  =================================== //
         // // // Pattern 4 // // //
         //  =================================== //
-        for(int i = 0; i < n; i++) {
+        // for(int i = 0; i < n; i++) {
 
-            for(int spaces = 0; spaces < i; spaces++) {
-                System.out.print(" ");
-            }
+        //     for(int spaces = 0; spaces < i; spaces++) {
+        //         System.out.print(" ");
+        //     }
 
-            for(int stars = n-1; stars >= i ; stars--) {
-                System.out.print("* ");
-            }
-            System.out.println();
-        }
+        //     for(int stars = n-1; stars >= i ; stars--) {
+        //         System.out.print("* ");
+        //     }
+        //     System.out.println();
+        // }
     }
 }
