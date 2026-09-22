@@ -1,9 +1,9 @@
 
-public class Day4Trees {
+public class Demo {
 
     Node prev;
 
-    public Day4Trees() {
+    public Demo() {
         this.prev = null;
     }
 
@@ -72,7 +72,6 @@ public class Day4Trees {
             }
 
             // 2 children
-            
             Node IOS = inOrderSuccessor(root.right);
             root.data = IOS.data;
             root.right = deleteNode(root.right, IOS.data);
@@ -158,7 +157,7 @@ public class Day4Trees {
     }
 
     public static void main(String[] args) {
-        Day4Trees bst = new Day4Trees();
+        Demo bst = new Demo();
 
         Node root = bst.insert(50, null);
         bst.insert(30, root);
