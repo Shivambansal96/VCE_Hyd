@@ -83,7 +83,7 @@ public class Demo {
     }
 
     public Node inOrderSuccessor(Node root) {
-        if (root.left != null) {
+        while (root.left != null) {
             root = root.left;
         }
 
@@ -174,7 +174,8 @@ public class Demo {
         // bst.inOrder(root);
         // System.out.println(bst.lca(root, 2170, 90).data);
         // System.out.println(bst.isValidBST(root, null, null));
-        System.out.println(bst.minDistance(root));
+        // System.out.println(bst.minDistance(root));
+        System.out.println(bst.inOrderSuccessor(root).data);
 
     }
 }
