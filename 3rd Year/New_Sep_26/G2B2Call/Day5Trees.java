@@ -1,4 +1,7 @@
 
+import java.util.LinkedList;
+import java.util.Queue;
+
 public class Day5Trees {
 
     public class Node {
@@ -37,9 +40,9 @@ public class Day5Trees {
 
         if (target < root.data) {
             modifyNode(root.left, target); // 30
-         }else if (target > root.data) {
-            modifyNode(root.right, target); 
-        }else { // Target Found
+        } else if (target > root.data) {
+            modifyNode(root.right, target);
+        } else { // Target Found
             root.data = 51;
         }
 
@@ -82,6 +85,31 @@ public class Day5Trees {
 
     }
 
+    public void levelOrderBFS(Node root) {
+        Queue<Node> q = new LinkedList<>();
+        q.offer(root);
+
+        while (!q.isEmpty()) {
+            int qSize = q.size();
+            for (int i = 0; i < qSize; i++) {
+
+                Node curr = q.poll();
+                System.out.print(curr.data + " ");
+
+                if (curr.left != null) {
+                    q.offer(curr.left);
+                }
+
+                if (curr.right != null) {
+                    q.offer(curr.right);
+                }
+
+            }
+            System.out.println();
+
+        }
+    }
+
     public Node inOrderSuccessor(Node root) {
 
         while (root.left != null) {
@@ -117,10 +145,22 @@ public class Day5Trees {
         bst.inOrder(root);
 
         System.out.println();
+        System.out.println();
         // bst.modifyNode(root, 60);
-        bst.deleteNode(root, 60);
+        // bst.deleteNode(root, 60);
 
-        bst.inOrder(root);
+        // bst.inOrder(root);
+
+        bst.levelOrderBFS(root);
+
+
+        // ====================================== //
+        // ============ LeetCode Q104 (Max Depth of BT) ============ //
+        // ====================================== //
+
+        // ====================================== //
+        // ============ LeetCode Q111 (Min Depth of BT) ============ //
+        // ====================================== //
 
     }
 
